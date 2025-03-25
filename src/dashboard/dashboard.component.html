@@ -1,0 +1,19 @@
+<app-header></app-header>
+<p>hello {{userName | async}}</p>
+
+<p>Your wallet address is {{walletAddress | async}}</p>
+<br>
+
+<div>
+    <input type="text" [(ngModel)]="electionName" placeholder="Election Name" />
+    <button (click)="createElection()">Create Election</button>
+  </div>
+
+<div>
+    <h4>Elections:</h4>
+    <li *ngFor="let election of elections; let i = index">
+        {{ election }}
+        <button>Go</button>
+      </li>
+
+</div>
