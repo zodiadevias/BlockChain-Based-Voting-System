@@ -3,7 +3,8 @@ pragma solidity >=0.4.21 <=0.8.20;
 pragma experimental ABIEncoderV2;
 
 contract DecentralizedVoting {
-    address public owner; // Contract deployer
+    address[] public org;
+    address deployer;
 
     struct User {
         string userName;
@@ -14,6 +15,7 @@ contract DecentralizedVoting {
 
     struct Candidate {
         string name;
+        string position;
         uint256 voteCount;
     }
 
@@ -31,16 +33,39 @@ contract DecentralizedVoting {
     event CandidateAdded(uint256 electionId, string name);
     event Voted(uint256 electionId, uint256 candidateIndex, address voter);
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only the owner can perform this action");
+    modifier onlyOrg() {
+        bool isOrg = false;
+        for (uint256 i = 0; i < org.length; i++) {
+            if (msg.sender == org[i]) {
+                isOrg = true;
+                break;
+            }
+        }
+        require(isOrg, "Only the organizer can perform this action");
         _;
     }
 
-    constructor() public{
-        owner = msg.sender; // Set the contract deployer as the owner
+    constructor() public {
+        addOrg();
+        deployer = msg.sender;
     }
 
 
+    
+    function addOrg() public {
+        org.push(msg.sender);
+    }    
+
+    
+    function getOrg(address _org) public view returns (bool) {
+        for (uint i = 0; i < org.length; i++) {
+            if (org[i] == _org) {
+                return true;
+                
+            }
+        }
+        return false;
+    }
     
     function addUser(address userAddress, string memory userName, string memory email) public {
         require(bytes(users[userAddress].userName).length == 0, "User already exists");
@@ -70,11 +95,11 @@ contract DecentralizedVoting {
 
 
     function getOwnerAddress() public view returns (address) {
-        return owner;
+        return deployer;
     }
 
     // Create a new election (only owner)
-    function createElection(string memory _name) public onlyOwner {
+    function createElection(string memory _name) public onlyOrg {
         electionCount++;
         Election storage newElection = elections[electionCount];
         newElection.name = _name;
@@ -84,11 +109,11 @@ contract DecentralizedVoting {
     }
 
     // Add a candidate to an election (only owner)
-    function addCandidate(uint256 _electionId, string memory _candidateName) public onlyOwner {
+    function addCandidate(uint256 _electionId, string memory _candidateName, string memory _candidatePosition) public onlyOrg {
         require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
         require(elections[_electionId].active, "Election is not active");
 
-        elections[_electionId].candidates.push(Candidate({ name: _candidateName, voteCount: 0 }));
+        elections[_electionId].candidates.push(Candidate({ name: _candidateName, voteCount: 0 , position: _candidatePosition}));
         emit CandidateAdded(_electionId, _candidateName);
     }
 
@@ -154,7 +179,7 @@ contract DecentralizedVoting {
     }
 
     // Close an election (only owner)
-    function closeElection(uint256 _electionId) public onlyOwner {
+    function closeElection(uint256 _electionId) public onlyOrg {
         require(_electionId > 0 && _electionId <= electionCount && elections[_electionId].active == true, "Election does not exist or is not active");
         elections[_electionId].active = false;
     }
