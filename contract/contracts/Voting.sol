@@ -2,8 +2,20 @@
 pragma solidity >=0.4.21 <=0.8.20;
 pragma experimental ABIEncoderV2;
 
+
 contract DecentralizedVoting {
-    address[] public org;
+    //address[] public org;
+
+    mapping(address => UserOrg) public org;
+
+    struct UserOrg {
+        string orgName;
+        string userName;
+        string email;
+    }
+
+    mapping(address => uint[]) createdElectionID;
+
     address deployer;
 
     struct User {
@@ -16,6 +28,7 @@ contract DecentralizedVoting {
     struct Candidate {
         string name;
         string position;
+        string platform;
         uint256 voteCount;
     }
 
@@ -34,42 +47,47 @@ contract DecentralizedVoting {
     event Voted(uint256 electionId, uint256 candidateIndex, address voter);
 
     modifier onlyOrg() {
-        bool isOrg = false;
-        for (uint256 i = 0; i < org.length; i++) {
-            if (msg.sender == org[i]) {
-                isOrg = true;
-                break;
-            }
-        }
-        require(isOrg, "Only the organizer can perform this action");
+        
+        require(bytes(org[msg.sender].orgName).length > 0 || msg.sender == deployer, "Only the organizer can perform this action");
         _;
     }
 
     constructor() public {
-        addOrg();
         deployer = msg.sender;
     }
 
 
-    
-    function addOrg() public {
-        org.push(msg.sender);
+    //ORG    
+    function addOrg(string memory orgName, string memory name, string memory email) public {
+        org[msg.sender] = UserOrg(orgName, name, email);
     }    
 
     
-    function getOrg(address _org) public view returns (bool) {
-        for (uint i = 0; i < org.length; i++) {
-            if (org[i] == _org) {
-                return true;
-                
-            }
-        }
-        return false;
+    function isOrg(address orgAddress) public view returns (bool){
+        return bytes(org[orgAddress].orgName).length > 0;
     }
+
     
+    function getOrgName(address orgAddress) public view returns (string memory){
+        return org[orgAddress].orgName;
+    }
+
+    
+    function getOrgUserName(address orgAddress) public view returns (string memory){
+        return org[orgAddress].userName;
+    }
+
+    function getOrgEmail(address orgAddress) public view returns (string memory) {
+        return org[orgAddress].email;
+    }
+    //End ORG
+
+
+    //Voter
     function addUser(address userAddress, string memory userName, string memory email) public {
         require(bytes(users[userAddress].userName).length == 0, "User already exists");
         users[userAddress] = User(userName, email);
+        
     }
 
     function isUser(address userAddress) public view returns (bool){
@@ -91,7 +109,7 @@ contract DecentralizedVoting {
         if(bytes(user.email).length > 0)
             return string(abi.encodePacked(user.email));
     }
-
+    //end voter
 
 
     function getOwnerAddress() public view returns (address) {
@@ -104,16 +122,21 @@ contract DecentralizedVoting {
         Election storage newElection = elections[electionCount];
         newElection.name = _name;
         newElection.active = true;
+        createdElectionID[msg.sender].push(electionCount);
 
         emit ElectionCreated(electionCount, _name);
     }
 
+    function getOwnedElections(address orgAddress) public view returns (uint[] memory){
+        return createdElectionID[orgAddress];
+    }
+
     // Add a candidate to an election (only owner)
-    function addCandidate(uint256 _electionId, string memory _candidateName, string memory _candidatePosition) public onlyOrg {
+    function addCandidate(uint256 _electionId, string memory _candidateName, string memory _candidatePosition, string memory _platform) public onlyOrg {
         require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
         require(elections[_electionId].active, "Election is not active");
 
-        elections[_electionId].candidates.push(Candidate({ name: _candidateName, voteCount: 0 , position: _candidatePosition}));
+        elections[_electionId].candidates.push(Candidate({ name: _candidateName, voteCount: 0 , position: _candidatePosition , platform: _platform}));
         emit CandidateAdded(_electionId, _candidateName);
     }
 

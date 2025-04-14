@@ -1,74 +1,98 @@
-import { Component, inject, Inject } from '@angular/core';
-import { HeaderComponent } from "../header/header.component";
+import { Component, inject, Inject ,HostListener, OnInit, signal, computed} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BlockchainService } from '../blockchain.service';
 import { Router } from '@angular/router';
+import { LeftSidebarComponent } from '../left-sidebar/left-sidebar.component';
+
 
 
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeaderComponent, CommonModule, FormsModule],
+  imports: [ CommonModule, FormsModule, LeftSidebarComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 
 
-export class DashboardComponent {
-  
+export class DashboardComponent implements OnInit {
+
+  isLeftSidebarCollapsed = signal<boolean>(false);
+  screenWidth = signal<number>(window.innerWidth);
+
+  @HostListener('window:resize')
+  onResize() {
+    this.screenWidth.set(window.innerWidth);
+    if (this.screenWidth() < 768) {
+      this.isLeftSidebarCollapsed.set(true);
+    }
+  }
+
+  changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
+    this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
+  }
+
+  sizeClass = computed(() => {
+    const isLeftSidebarCollapsed = this.isLeftSidebarCollapsed();
+    if (isLeftSidebarCollapsed) {
+      return '';
+    }
+    return this.screenWidth() > 768 ? 'body-trimmed' : 'body-md-screen';
+  });
+
+
+
+
   router = inject(Router);
   private blockchainService = inject(BlockchainService);
   
   constructor() {
-
-   
-    // if (GlobalsService.isSignedin == false || GlobalsService.isSignedin == undefined) {
-    //   this.router.navigate(['/auth']);
-    // }
-    // console.log(GlobalsService.isSignedin);
   }
 
 
-  walletAddress: Promise<string> = Promise.resolve('');
+  walletAddress: string = '';
   userName: Promise<string> = Promise.resolve('');
-  elections: any[] = [];
-  electionName: string = '';
+  orgName: Promise<string> = Promise.resolve('');
+  
   owner = '0xF3dcc20F2889631e7f09618b460149f770004517';
   user: Promise <string> = Promise.resolve(this.blockchainService.getUserAddress());
+  whatAmI: string = '';
   
-
-  async getElections() {
-    this.elections = await this.blockchainService.getElectionNames();
-  }
+  
   async ngOnInit(): Promise<void> {
-      try {
+    this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
+    
+      try{
         await this.blockchainService.loadBlockchain();
-        if (this.blockchainService.signer) {
-          this.walletAddress = this.blockchainService.signer.getAddress();
-          this.userName = this.blockchainService.getUsername(this.blockchainService.signer.getAddress());
-        } else {
+        const isUser = await this.blockchainService.userExists(await this.blockchainService.getUserAddress());
+        const isOrg = await this.blockchainService.isOrg(await this.blockchainService.getUserAddress());
+        this.walletAddress = await this.blockchainService.getUserAddress();
+        if (isUser){
+          this.whatAmI = 'Voter';
+        }
+        else if (isOrg){
+          this.whatAmI = 'Organizer';
+        }
+        else{
+          localStorage.clear();
           this.router.navigate(['/auth']);
         }
-      } catch (e) {
+
+      }catch(e){
+        localStorage.clear();
         this.router.navigate(['/auth']);
-      } 
+      }
 
-
-      await this.getElections();
+      if (this.whatAmI == ''){
+        localStorage.clear();
+        this.router.navigate(['/auth']);
+      }
   }
 
 
-  async createElection() {
-    await this.blockchainService.createElection(this.electionName);
-    
-  }
 
   
-
-  
-
-
   
 
 

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
 
-const contractAddress = '0x81a1459313397FCab6503C2192166c1735d3bcaC';
+const contractAddress = '0x0Dc4Af4604FC1D813525d33B02B51CC1b7006aFD';
 const contractABI: any = [
   {
     "inputs": [],
+    "payable": false,
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -72,6 +73,7 @@ const contractABI: any = [
     "type": "event"
   },
   {
+    "constant": true,
     "inputs": [],
     "name": "electionCount",
     "outputs": [
@@ -81,10 +83,12 @@ const contractABI: any = [
         "type": "uint256"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "uint256",
@@ -105,23 +109,43 @@ const contractABI: any = [
         "type": "bool"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
+    "constant": true,
+    "inputs": [
       {
         "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
+    "name": "org",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "orgName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "userName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
+      }
+    ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "address",
@@ -142,10 +166,121 @@ const contractABI: any = [
         "type": "string"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "orgName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
+      }
+    ],
+    "name": "addOrg",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "orgAddress",
+        "type": "address"
+      }
+    ],
+    "name": "isOrg",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "orgAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getOrgName",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "orgAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getOrgUserName",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "orgAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getOrgEmail",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
     "inputs": [
       {
         "internalType": "address",
@@ -165,10 +300,12 @@ const contractABI: any = [
     ],
     "name": "addUser",
     "outputs": [],
+    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "address",
@@ -184,10 +321,12 @@ const contractABI: any = [
         "type": "bool"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [],
     "name": "getUserAddress",
     "outputs": [
@@ -197,10 +336,12 @@ const contractABI: any = [
         "type": "address"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "address",
@@ -216,10 +357,12 @@ const contractABI: any = [
         "type": "string"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "address",
@@ -235,10 +378,12 @@ const contractABI: any = [
         "type": "string"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [],
     "name": "getOwnerAddress",
     "outputs": [
@@ -248,10 +393,12 @@ const contractABI: any = [
         "type": "address"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": false,
     "inputs": [
       {
         "internalType": "string",
@@ -261,10 +408,12 @@ const contractABI: any = [
     ],
     "name": "createElection",
     "outputs": [],
+    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
+    "constant": false,
     "inputs": [
       {
         "internalType": "uint256",
@@ -275,14 +424,21 @@ const contractABI: any = [
         "internalType": "string",
         "name": "_candidateName",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_candidatePosition",
+        "type": "string"
       }
     ],
     "name": "addCandidate",
     "outputs": [],
+    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
+    "constant": false,
     "inputs": [
       {
         "internalType": "uint256",
@@ -297,10 +453,12 @@ const contractABI: any = [
     ],
     "name": "vote",
     "outputs": [],
+    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "uint256",
@@ -321,10 +479,12 @@ const contractABI: any = [
         "type": "uint256[]"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "uint256",
@@ -340,10 +500,12 @@ const contractABI: any = [
         "type": "uint256"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "uint256",
@@ -364,10 +526,12 @@ const contractABI: any = [
         "type": "string"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "uint256",
@@ -383,10 +547,12 @@ const contractABI: any = [
         "type": "string[]"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [
       {
         "internalType": "uint256",
@@ -402,10 +568,12 @@ const contractABI: any = [
         "type": "string"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "constant": false,
     "inputs": [
       {
         "internalType": "uint256",
@@ -415,10 +583,12 @@ const contractABI: any = [
     ],
     "name": "closeElection",
     "outputs": [],
+    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [],
     "name": "getElectionNames",
     "outputs": [
@@ -428,6 +598,7 @@ const contractABI: any = [
         "type": "string[]"
       }
     ],
+    "payable": false,
     "stateMutability": "view",
     "type": "function"
   }
@@ -461,9 +632,9 @@ export class BlockchainService {
     await tx.wait();
   }
 
-  async addCandidate(electionID: number, candidateName: string){
+  async addCandidate(electionID: number, candidateName: string, position: string, platform: string){
     if (!this.contract) return;
-    const tx = await (this.contract as any).addCandidate(electionID, candidateName);
+    const tx = await (this.contract as any).addCandidate(electionID, candidateName, position, platform);
     await tx.wait();
   }
 
@@ -529,6 +700,64 @@ export class BlockchainService {
     }
   }
 
+  
+  //ORG
+  async addOrg(orgName: string, name: string, email: string){
+    if (!this.contract) return;
+    try{
+      const tx = await (this.contract as any).addOrg(orgName, name, email);
+      await tx.wait();
+    }catch(error){
+      
+    }
+  }
+
+  async isOrg(orgAddress: string): Promise<boolean> {
+    if (!this.contract) return false;
+    try {
+      const result = await (this.contract as any).isOrg(orgAddress);
+      return result;
+    } catch (error) {
+      console.error("Error user exists:", error);
+      return false;
+    }
+  }
+
+  async getOrgName(orgAddress: string): Promise<string> {
+    if (!this.contract) return "";
+    try {
+      const result = await (this.contract as any).getOrgName(orgAddress);
+      return result;
+    } catch (error) {
+      console.error("Error getting org name:", error);
+      return "";
+    }
+  }
+
+  async getOrgUserName(orgAddress: string): Promise<string> {
+    if (!this.contract) return "";
+    try {
+      const result = await (this.contract as any).getOrgUserName(orgAddress);
+      return result;
+    } catch (error) {
+      console.error("Error getting org name:", error);
+      return "";
+    }
+  }
+
+  async getOrgEmail(orgAddress: string): Promise<string> {
+    if (!this.contract) return "";
+    try {
+      const result = await (this.contract as any).getOrgEmail(orgAddress);
+      return result;
+    } catch (error) {
+      console.error("Error getting org name:", error);
+      return "";
+    }
+  }
+  //END ORG
+
+  //USER
   async addUser(userAddress: string, userName: string, email: string){
     if (!this.contract) return;
     try{
@@ -536,10 +765,10 @@ export class BlockchainService {
       await tx.wait();     
     }catch (error){
       console.log(error);
+      return;
     }
   }
 
-  
   async userExists(userAddress: string): Promise<boolean> {
     if (!this.contract) return false;
     try {
@@ -586,6 +815,21 @@ export class BlockchainService {
       return "";
     }    
   }
+
+  //END USER
+
+  async getOwnedElections(userAddress: string): Promise<number[]> {
+    if (!this.contract) return [];
+    try {
+      const result = await (this.contract as any).getOwnedElections(userAddress);
+      return result;
+    } catch (error) {
+      console.error("Error getting owned elections:", error);
+      return [];
+    }    
+  }
+
+  
 
 
 }

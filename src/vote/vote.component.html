@@ -1,2 +1,7 @@
-<app-header></app-header>
-<p>vote works!</p>
+<app-left-sidebar
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
+/>
+<div class="body" [ngClass]="sizeClass()">
+    <p>vote</p>
+</div>

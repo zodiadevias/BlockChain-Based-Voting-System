@@ -1,6 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
+
 body{
-    background-color: gainsboro;
+    background-color: #272635;
+    font-family: 'Alumni Sans';
+    color: white;
+    background-image: url("/img/background.svg");
+    background-size: cover;
+    background-attachment: fixed;
 }
+
+
+
+
+

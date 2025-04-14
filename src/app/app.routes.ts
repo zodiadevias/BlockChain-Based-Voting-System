@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthComponent } from '../auth/auth.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { CandidatesComponent } from '../candidates/candidates.component';
+import { ElectionsComponent } from '../elections/elections.component';
 import { VoteComponent } from '../vote/vote.component';
 import { ResultsComponent } from '../results/results.component';
 import { ProfileComponent } from '../profile/profile.component';
@@ -21,8 +21,8 @@ export const routes: Routes = [
         component: DashboardComponent
     },
     {
-        path: 'candidates',
-        component: CandidatesComponent
+        path: 'elections',
+        component: ElectionsComponent
     },
     {
         path: 'vote',

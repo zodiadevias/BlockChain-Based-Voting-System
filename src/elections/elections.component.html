@@ -1,0 +1,131 @@
+<app-left-sidebar
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
+/>
+
+<div class="body" [ngClass]="sizeClass()">
+    <div>
+        <h3 style="padding-top: 1rem;">Manage Elections</h3>
+        <hr style="margin-left: -5rem;">
+    </div>
+
+    @if(manage == 1){
+        <div class="flex-container">
+            
+            <div class="box-container">
+                <h3 class="box-title">Create Election</h3>
+                <div class="flexbox">
+                    <h4>Election Name:</h4>
+                    <input type="text" [(ngModel)]="electionName">
+                    <br>
+                    <h4>Start Date:</h4>
+                    <input type="datetime-local" [(ngModel)]="startDate">
+                    <br>
+                    <h4>End Date:</h4>
+                    <input type="datetime-local" [(ngModel)]="endDate">
+                    <br>
+                    <h4>Domain Filter:</h4>
+                    <input type="text" [(ngModel)]="domainFilter">
+                    <br>
+                    <div style="display: flex; flex-direction: row;">
+                        <h4 style="margin-right: 1rem;">Organization Logo:</h4>
+                    <uc-config
+                        ctx-name="my-uploader"
+                        source-list="local, camera, facebook, gdrive"
+                        multiple="false"
+                        camera-modes="photo, video"
+                        pubkey="d79c45e1617abf9520ed"
+                        removeCopyright="true"
+                        
+                    ></uc-config>
+                    <uc-file-uploader-regular ctx-name="my-uploader" class="uc-light"></uc-file-uploader-regular>
+                    
+                    </div>
+                    <br>
+                    <button (click)="createElection()" class="btn">Create Election</button>
+                </div>
+                
+                
+            </div>
+            
+            
+            <div class="box-container" style="margin-right: 3rem;">
+            <h3 class="box-title">Election List</h3>
+            
+            <div class="box">
+                <ul *ngIf="elections.length > 0; else noElections">
+                    <li *ngFor="let election of elections; let i = index">
+                    <button (click)="viewElection(i)" class="btn">{{ election }}</button>
+                    </li>
+                </ul>
+                <ng-template #noElections>
+                    <button (click)="getElections()" class="btn-refresh">Click here to refresh list</button>
+                </ng-template>
+            </div>
+            </div>
+        </div>
+    }
+
+    @if(manage == 2){
+            
+            <div class="box-container-full">
+                <div class="box-title"><h3>Election name: {{electionName}}</h3></div>
+                    <div class="box-padding">
+                        
+                        <button class="btn-manage" (click)="toggleWindowManager = 'candidates'">Manage Candidates</button>
+                        <button class="btn-manage" (click)="toggleWindowManager = 'update'">Edit Election</button>
+                        <button class="btn-manage" (click)="toggleWindowManager = 'delete'">Delete Election</button>
+                        <button class="btn-manage" style="width: 25px;background-color: red;color:black" (click)="manage = 1">X</button>
+                    </div>
+
+                    @if(toggleWindowManager == 'candidates'){
+                        <div class="manage-flex">
+                            <div class="box-container" style="margin-top: 10px;height: 740px">
+                                <h3 class="box-title">Add Candidate</h3>
+                                <div class="box">
+                                    <div class="portrait-container">
+                                        <img class="portrait" src="img/BlockVote.png">
+                                    </div>
+                                    <uc-config
+                                    ctx-name="my-uploader"
+                                    source-list="local, camera, facebook, gdrive"
+                                    multiple="false"
+                                    camera-modes="photo, video"
+                                    pubkey="d79c45e1617abf9520ed"
+                                    removeCopyright="true"
+                                    
+                                ></uc-config>
+                                <uc-file-uploader-regular ctx-name="my-uploader" class="uc-light" style="margin:42%;"></uc-file-uploader-regular>
+                                    
+                                </div>
+                            </div>
+                            <div class="box-container" style="margin-top: 10px;height: 740px;">
+                                <h3 class="box-title">Candidate List</h3>
+                                <div class="box">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    }
+                    
+                    @if(toggleWindowManager == 'update'){
+                        <div>
+                            update
+                        </div>
+                    }
+
+                    @if(toggleWindowManager == 'delete'){
+                        <div>
+                            delete
+                        </div>
+                    }
+
+                </div>
+                
+            
+            
+            
+        
+    }
+
+</div>

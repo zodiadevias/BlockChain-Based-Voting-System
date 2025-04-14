@@ -1,19 +1,30 @@
-<app-header></app-header>
-<p>hello {{userName | async}}</p>
+<app-left-sidebar
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
+/>
 
-<p>Your wallet address is {{walletAddress | async}}</p>
-<br>
 
-<div>
-    <input type="text" [(ngModel)]="electionName" placeholder="Election Name" />
-    <button (click)="createElection()">Create Election</button>
+<div class="body" [ngClass]="sizeClass()">
+  <div>
+    <h3 style="padding-top: 1rem;">Dashboard</h3>
+    <hr style="margin-left: -5rem;">
   </div>
+  <h4>Welcome {{whatAmI}}!</h4>
+  <p>Wallet address: {{walletAddress}}</p>
+  <br>
 
-<div>
-    <h4>Elections:</h4>
-    <li *ngFor="let election of elections; let i = index">
-        {{ election }}
-        <button>Go</button>
-      </li>
+  <div class="flex-container">
 
+    <div class="box-container">
+      <h3 class="box-title">Ongoing Elections</h3>
+    </div>
+
+    <div class="box-container" style="margin-right: 3rem;">
+      <h3 class="box-title">Upcoming Elections</h3>
+    </div>
+
+  </div>
+  
+
+  
 </div>

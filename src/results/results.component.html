@@ -1,2 +1,8 @@
-<app-header></app-header>
-<p>results works!</p>
+<app-left-sidebar
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
+/>
+
+<div class="body" [ngClass]="sizeClass()">
+    <p>result works!</p>
+    </div>
