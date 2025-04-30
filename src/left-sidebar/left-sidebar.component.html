@@ -43,26 +43,26 @@
       <li class="sidenav-nav-item">
         <a
           class="sidenav-nav-link"
-          [routerLink]="['/vote']"
-          routerLinkActive="active" 
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <i class="sidenav-link-icon fal fa-poll"></i>
-          @if (!isLeftSidebarCollapsed()) {
-            <span class="sidenav-link-text">Vote</span>
-          }
-        </a>
-      </li>
-      <li class="sidenav-nav-item">
-        <a
-          class="sidenav-nav-link"
           [routerLink]="['/results']"
           routerLinkActive="active" 
           [routerLinkActiveOptions]="{ exact: true }"
         >
           <i class="sidenav-link-icon fal fa-box-open"></i>
           @if (!isLeftSidebarCollapsed()) {
-            <span class="sidenav-link-text">Result</span>
+            <span class="sidenav-link-text">Election Results</span>
+          }
+        </a>
+      </li>
+      <li class="sidenav-nav-item">
+        <a
+          class="sidenav-nav-link"
+          [routerLink]="['/account']"
+          routerLinkActive="active" 
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="sidenav-link-icon fal fa-cog"></i>
+          @if (!isLeftSidebarCollapsed()) {
+            <span class="sidenav-link-text">Manage Account</span>
           }
         </a>
       </li>

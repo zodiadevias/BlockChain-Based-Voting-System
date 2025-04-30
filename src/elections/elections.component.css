@@ -46,8 +46,10 @@
     height: 93%;
     scrollbar-width: thin;
     scrollbar-color: #CECECE #272635;
-    
-    
+  }
+
+  .box-no-scroll{
+    height: 93%;
   }
 
   
@@ -67,6 +69,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px 10px 0 0;
+    margin-bottom: 0;
     
   }
 
@@ -117,7 +120,7 @@
 .btn-manage{
     background-color: #272635;
     color: #fff;
-    width: 550px;
+    width: 600px;
     height: 30px;
     font-size: smaller;
     border: 1px solid #CECECE;
@@ -158,6 +161,7 @@
 }
 
 .portrait{
+  
   width: 100px;
   height: 100px;
 }
@@ -167,4 +171,31 @@
   width: 100px;
   height: 100px;
   margin: auto;
+  margin-top: 10px;
+}
+
+.btn-list{
+  margin:0;
+  cursor: pointer;
+}
+
+.btn-list:hover{
+  background-color: white;
+  color: black;
+  transition: all 0.3s ease;
+}
+
+.close{
+  background-color: red;
+  width: 33.3%;
+  margin-top: 0;
+}
+
+.flex-only{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 25rem;
+  padding-right: 25rem;
+  
 }

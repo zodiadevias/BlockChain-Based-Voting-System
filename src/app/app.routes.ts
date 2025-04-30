@@ -4,7 +4,8 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { ElectionsComponent } from '../elections/elections.component';
 import { VoteComponent } from '../vote/vote.component';
 import { ResultsComponent } from '../results/results.component';
-import { ProfileComponent } from '../profile/profile.component';
+
+import { AccountComponent } from '../account/account.component';
 
 export const routes: Routes = [
     {
@@ -33,8 +34,8 @@ export const routes: Routes = [
         component: ResultsComponent
     },
     {
-        path: 'profile',
-        component: ProfileComponent
+        path: 'account',
+        component: AccountComponent
     }
     
 ];

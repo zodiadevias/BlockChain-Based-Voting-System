@@ -1,0 +1,18 @@
+<app-left-sidebar
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
+/>
+
+<div class="body" [ngClass]="sizeClass()">
+    <div>
+        <h3 style="padding-top: 1rem;">Manage Account</h3>
+        <hr style="margin-left: -5rem;">
+    </div>
+
+    <h4>Organization Name:</h4>
+    <input type="text">
+    <h4>Organization Email:</h4>
+    <input type="text">
+    <br>
+    <button>Update</button>
+</div>
