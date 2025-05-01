@@ -69,6 +69,42 @@ export class ElectionsComponent implements OnInit {
 
   toggleWindowManager: string = 'candidates';
   address: string = '';
+  msg: string = '';
+
+  async toggleWindow(window: string) {
+    this.toggleWindowManager = window;
+    if(window == 'details'){
+      this._startDate = await this.blockchainService.getElectionStartDate(this.electionIdTitle);
+      this._endDate = await this.blockchainService.getElectionEndDate(this.electionIdTitle);
+      this._domainFilter = await this.blockchainService.getElectionDomainFilter(this.electionIdTitle);
+    }else if(window == 'update'){
+      this._startDate = await this.blockchainService.getElectionStartDate(this.electionIdTitle);
+      this._endDate = await this.blockchainService.getElectionEndDate(this.electionIdTitle);
+      this._domainFilter = await this.blockchainService.getElectionDomainFilter(this.electionIdTitle);
+      this.new_electionName = this._electionName;
+      this.new_startDate = this._startDate;
+      this.new_endDate = this._endDate;
+      this.new_domainFilter = this._domainFilter;
+    }
+  }
+
+
+
+  checkDate(){
+    const startDate = new Date(this.startDate);
+    const endDate = new Date(this.endDate);
+    if(startDate < endDate){
+      this.msg = '';
+      this.createElection();
+      this.ownedElectionNames();
+    }else{
+      if(this.startDate == '' || this.endDate == ''){
+        this.msg = 'Please fill required fields';
+      }else{
+        this.msg = 'Start date must be before end date';
+      }
+    }
+  }
 
   async createElection() {
     await this.blockchainService.createElection(this.electionName, this.startDate, this.endDate, this.domainFilter);
@@ -93,6 +129,15 @@ export class ElectionsComponent implements OnInit {
     }
   }
 
+  async updateElection(){
+    const confirmUpdate = confirm('Are you sure you want to update this election?');
+    if(confirmUpdate){
+      await this.blockchainService.updateElection(this.electionIdTitle, this.new_electionName, this.new_startDate, this.new_endDate, this.new_domainFilter);
+      this.ownedElectionNames();
+      this.manage = 1;
+    }
+  }
+
   
   
 
@@ -107,6 +152,8 @@ export class ElectionsComponent implements OnInit {
     this.getCandidateNames();
     this.manage = 2;
   }
+
+
 
   async getOwnedElectionIDbyName(name: string) {
     return await this.blockchainService.getElectionIDbyName(name);
@@ -156,6 +203,9 @@ export class ElectionsComponent implements OnInit {
   candidates: any[] = [];
   updateCandidate: boolean = false;
   candidateNameUpdate: string = '';
+  candidatePositionUpdate: string = '';
+  candidatePlatformUpdate: string = '';
+  candidateNameTitle: string = '';
 
   async addCandidate() {
     const electionID = this.electionIdTitle;
@@ -168,7 +218,10 @@ export class ElectionsComponent implements OnInit {
 
   async toggleCandidateUpdateOn(name: string) {
     this.updateCandidate = true;
+    this.candidateNameTitle = name;
     this.candidateNameUpdate = name;
+    this.candidatePositionUpdate = await this.blockchainService.getCandidatePosition(this.electionIdTitle, this.candidates.indexOf(name));
+    this.candidatePlatformUpdate = await this.blockchainService.getCandidatePlatform(this.electionIdTitle, this.candidates.indexOf(name));
   }
 
   async toggleCandidateUpdateOff() {
@@ -178,6 +231,31 @@ export class ElectionsComponent implements OnInit {
 
   async getCandidateNames() {
     this.candidates = await this.blockchainService.getCandidates(this.electionIdTitle);
+  }
+
+  async deleteCandidate(){
+    const confirmDelete = confirm('Are you sure you want to delete this candidate?');
+
+    if (confirmDelete) {
+      await this.blockchainService.deleteCandidate(this.electionIdTitle, this.candidates.indexOf(this.candidateNameUpdate));
+      this.getCandidateNames();
+      this.candidateNameUpdate = '';
+      this.candidatePositionUpdate = '';
+      this.candidatePlatformUpdate = '';
+      this.toggleCandidateUpdateOff();
+    }
+    
+  }
+
+  async updateCandidateInfo(){
+
+    const confirmUpdate = confirm('Are you sure you want to update this candidate?');
+    if (confirmUpdate){
+      await this.blockchainService.updateCandidate(this.electionIdTitle, this.candidates.indexOf(this.candidateNameTitle), this.candidateNameUpdate, this.candidatePositionUpdate, this.candidatePlatformUpdate);
+      this.getCandidateNames();
+      this.toggleCandidateUpdateOff();
+    }
+    
   }
 }
 

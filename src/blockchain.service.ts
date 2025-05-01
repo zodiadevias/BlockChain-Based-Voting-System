@@ -1149,6 +1149,12 @@ export class BlockchainService {
     return result;
   }
 
+  async updateElection(electionID: number, name: string, startDate: string, endDate: string, domainFilter: string){
+    if (!this.contract) return;
+    const tx = await (this.contract as any).updateElectionDetails(electionID, name, startDate, endDate, domainFilter);
+    await tx.wait();
+  }
+
   //End Election
 
 
@@ -1157,12 +1163,6 @@ export class BlockchainService {
   async addCandidate(electionID: number, candidateName: string, position: string, platform: string){
     if (!this.contract) return;
     const tx = await (this.contract as any).addCandidate(electionID, candidateName, position, platform);
-    await tx.wait();
-  }
-
-  async vote(electionID: number, candidateIndex: number){
-    if (!this.contract) return;
-    const tx = await (this.contract as any).vote(electionID, candidateIndex);
     await tx.wait();
   }
 
@@ -1183,6 +1183,36 @@ export class BlockchainService {
       console.log(error);
       return [];
     }
+  }
+
+  async getCandidatePosition(electionID: number, candidateID: number){
+    if (!this.contract) return;
+    const result = await (this.contract as any).getCandidatePosition(electionID, candidateID);
+    return result;
+  }
+
+  async getCandidateName(electionID: number, candidateID: number){
+    if (!this.contract) return;
+    const result = await (this.contract as any).getCandidateName(electionID, candidateID);
+    return result;
+  }
+
+  async getCandidatePlatform(electionID: number, candidateID: number){
+    if (!this.contract) return;
+    const result = await (this.contract as any).getCandidatePlatform(electionID, candidateID);
+    return result;
+  }
+
+  async deleteCandidate(electionID: number, candidateID: number){
+    if (!this.contract) return;
+    const tx = await (this.contract as any).deleteCandidate(electionID, candidateID);
+    await tx.wait();
+  }
+
+  async updateCandidate(electionID: number, candidateID: number, candidateName: string, position: string, platform: string){
+    if (!this.contract) return;
+    const tx = await (this.contract as any).updateCandidateInfo(electionID, candidateID, candidateName, position, platform);
+    await tx.wait();
   }
 
   
