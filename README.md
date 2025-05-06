@@ -1,59 +1,101 @@
 # BlockVote
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.7.
+BlockChain-Based Voting System using Angular 19
 
-## Development server
+## Instructions
+0. Use Terminal targeting the project folder.
 
-To start a local development server, run:
+1. Install Ethers.js
+```bash
+npm i ethers
+```
+
+2. Install Truffle
+```bash
+npm i truffle
+```
+
+3. Install Angular Material
+```bash
+ng add @angular/material
+```
+
+4. Install Ganache
+link: https://archive.trufflesuite.com/ganache/
+
+
+
+## How to run
+0. Run ganache (create a workspace)
+
+1. Copy this code and paste to truffle-config.js
+
+```bash
+const path = require("path");
+
+module.exports = {
+  
+  contracts_build_directory: path.join(__dirname, "client/src/contracts"),
+  
+  networks: {
+    development: {
+      network_id: "*",
+      host: "127.0.0.1",
+      port: 7545,
+      gas: 6721975,
+      gasPrice: 20000000000,
+    },
+  },
+  compilers: {
+    solc: {
+      version: "0.8.20", 
+      
+    }
+  },
+};
+```
+
+2. Go to contracts folder using terminal.
+```bash
+truffle compile
+```
+
+3. Then copy this code then paste to truffle-config.js
+
+```bash
+const path = require("path");
+
+module.exports = {
+  
+  contracts_build_directory: path.join(__dirname, "client/src/contracts"),
+  
+  networks: {
+    development: {
+      network_id: "*",
+      host: "127.0.0.1",
+      port: 7545,
+      gas: 6721975,
+      gasPrice: 20000000000,
+    },
+  },
+  
+};
+```
+
+4. Go to terminal again
+```bash
+truffle migrate --reset
+```
+
+5. Copy ABI from contract/client/src/contracts/DecentralizedVoting.json and paste to contractABI array variable in blockchain.service.ts
+
+6. Copy Smart Contract Address from terminal and replace the contractAddress value. 
+
+7. Install and open Metamask and import account from Ganache.
+
+
+8. To start a local development server, run:
 
 ```bash
 ng serve
 ```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
