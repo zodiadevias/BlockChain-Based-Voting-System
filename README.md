@@ -20,7 +20,12 @@ npm i truffle
 ng add @angular/material
 ```
 
-4. Install Ganache
+4. Install EmailJS
+```bash
+npm install --save @emailjs/browser
+```
+
+5. Install Ganache
 link: https://archive.trufflesuite.com/ganache/
 
 
