@@ -13,17 +13,44 @@
   <p>Wallet address: {{walletAddress}}</p>
   <br>
 
-  <div class="flex-container">
+  @if(whatAmI == 'Organizer'){
+    <div class="flex-container">
 
-    <div class="box-container">
-      <h3 class="box-title">Ongoing Elections</h3>
+      <div class="box-container">
+        <h3 class="box-title">Ongoing Elections</h3>
+        <div class="box">
+          <mat-list *ngIf="ongoingElections.length > 0; else noElectionss">
+                      
+            <mat-list-item class="list-item" *ngFor="let election of ongoingElections; let i = index" ><h4 style="text-align: center;" class="btn-list">{{election}}</h4><mat-divider></mat-divider></mat-list-item>
+            
+            <!-- figuring out how to filter the list -->
+          </mat-list>
+          <ng-template #noElectionss>
+            <button  class="btn-refresh" (click)="ongoingElection()">Click here to refresh list</button>
+        </ng-template>
+          
+        </div>
+      </div>
+  
+      <div class="box-container" style="margin-right: 3rem;">
+        <h3 class="box-title">Upcoming Elections</h3>
+        <div class="box">
+          <mat-list *ngIf="upcomingElections.length > 0; else noElections">
+                      
+            <mat-list-item class="list-item" *ngFor="let election of upcomingElections; let i = index" ><h4 style="text-align: center;" class="btn-list">{{election}}</h4><mat-divider></mat-divider></mat-list-item>
+            
+            <!-- figuring out how to filter the list -->
+          </mat-list>
+          <ng-template #noElections>
+            <button  class="btn-refresh" (click)="upcomingElection()">Click here to refresh list</button>
+        </ng-template>
+          
+        </div>
+      </div>
+  
     </div>
-
-    <div class="box-container" style="margin-right: 3rem;">
-      <h3 class="box-title">Upcoming Elections</h3>
-    </div>
-
-  </div>
+  }
+  
   
 
   

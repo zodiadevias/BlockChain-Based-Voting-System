@@ -40,6 +40,8 @@ contract DecentralizedVoting {
         uint256 voteCount;
     }
 
+    
+
     struct Election {
         string name;
         bool active;

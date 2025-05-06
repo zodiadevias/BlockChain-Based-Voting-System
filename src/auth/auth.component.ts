@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BlockchainService } from '../blockchain.service';
 import { Router } from '@angular/router';
+import emailjs, { send, type EmailJSResponseStatus } from '@emailjs/browser';
+
 
 @Component({
   selector: 'app-auth',
@@ -11,11 +13,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent {
+  
+  
   public reg_1 = true;
   public register = false;
   public voter = false;
   public organizer = false;
   public success = '';
+
+  isOtp = false;
+  otp = '';
+  randomOTP: number = Math.floor(Math.random() * 10000);
 
   constructor(private blockchainService: BlockchainService,
     private router: Router
@@ -24,9 +32,27 @@ export class AuthComponent {
   async ngOnInit(): Promise<void> {
     // await this.blockchainService.loadBlockchain(); pending fix for onload
 
-    if (this.blockchainService.signer) {
-      this.router.navigate(['/dashboard']);
-    }
+    // if (this.blockchainService.signer) {
+    //   this.router.navigate(['/dashboard']);
+    // }
+  }
+
+  toggleOTP(){
+    this.isOtp = true;
+    this.randomOTP = Math.floor(Math.random() * 10000);
+    console.log(this.randomOTP);
+    const templateParams = {
+      passcode: this.randomOTP,
+      email: (document.getElementById('email') as HTMLInputElement).value,
+    };
+
+    emailjs.send('blockvote', 'template_q1zygbv', templateParams, 'M-Lel7Aav1F3ztGZV')
+    .then((response) => {
+      console.log('SUCCESS!', response.status, response.text);
+    })
+    .catch((err) => {
+      console.log('FAILED...', err);
+    });
   }
 
   //LOGIN WITH METAMASK
@@ -58,6 +84,7 @@ export class AuthComponent {
 
   //REGISTRATION
   async registerUser(isOrg: boolean){
+    
     const userName :string = (document.getElementById('name') as HTMLInputElement).value;
     const email :string = (document.getElementById('email') as HTMLInputElement).value;
     await this.blockchainService.loadBlockchain();
@@ -73,6 +100,7 @@ export class AuthComponent {
           await this.blockchainService.addOrg(orgName, userName, email);
           const isOrganizer = await this.blockchainService.isOrg(userAddress);
           if (isOrganizer){
+            localStorage.setItem('user', 'false');
             this.success = 'Organizer registered successfully';
             setTimeout(() => {
               this.router.navigate(['/dashboard']);
@@ -82,16 +110,24 @@ export class AuthComponent {
       }
       //VOTER
       else if (isOrg == false){
-        if (userName != '' && email != '') {
-          await this.blockchainService.addUser(userAddress, userName, email);
-          const isUser = await this.blockchainService.userExists(userAddress);
-          if (isUser){
-            this.success = 'Voter registered successfully';
-            setTimeout(() => {
-              this.router.navigate(['/dashboard']);
-            }, 3000);
+        if(this.otp == (this.randomOTP).toString()){
+          if (userName != '' && email != '') {
+            await this.blockchainService.addUser(userAddress, userName, email);
+            const isUser = await this.blockchainService.userExists(userAddress);
+            if (isUser){
+              localStorage.setItem('user', 'true');
+              this.success = 'Voter registered successfully';
+              setTimeout(() => {
+                this.router.navigate(['/dashboard']);
+              }, 3000);
+            }
           }
+        }else{
+          this.success = 'Incorrect OTP';
+          console.log(this.otp);
+          console.log(this.randomOTP);
         }
+        
       }
     }
 

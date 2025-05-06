@@ -66,6 +66,17 @@
           }
         </a>
       </li>
+      <li class="sidenav-nav-item"  (click)="logout()" style="cursor: pointer">
+        <a
+          class="sidenav-nav-link"
+
+        >
+          <i class="sidenav-link-icon fal fa-sign-out"></i>
+          @if (!isLeftSidebarCollapsed()) {
+            <span class="sidenav-link-text">Logout</span>
+          }
+        </a>
+      </li>
   </div>
 </div>
 
@@ -100,19 +111,6 @@
           }
         </a>
       </li>
-    <li class="sidenav-nav-item">
-        <a
-          class="sidenav-nav-link"
-          [routerLink]="['/candidates']"
-          routerLinkActive="active" 
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <i class="sidenav-link-icon fal fa-users"></i>
-          @if (!isLeftSidebarCollapsed()) {
-            <span class="sidenav-link-text">Candidates</span>
-          }
-        </a>
-      </li>
       <li class="sidenav-nav-item">
         <a
           class="sidenav-nav-link"
@@ -136,6 +134,17 @@
           <i class="sidenav-link-icon fal fa-box-open"></i>
           @if (!isLeftSidebarCollapsed()) {
             <span class="sidenav-link-text">Result</span>
+          }
+        </a>
+      </li>
+      <li class="sidenav-nav-item"  (click)="logout()" style="cursor: pointer">
+        <a
+          class="sidenav-nav-link"
+
+        >
+          <i class="sidenav-link-icon fal fa-sign-out"></i>
+          @if (!isLeftSidebarCollapsed()) {
+            <span class="sidenav-link-text">Logout</span>
           }
         </a>
       </li>

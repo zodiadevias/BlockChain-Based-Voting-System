@@ -27,20 +27,7 @@
                     <h4>Domain Filter:</h4>
                     <input type="text" [(ngModel)]="domainFilter">
                     <br>
-                    <div style="display: flex; flex-direction: row;">
-                        <h4 style="margin-right: 1rem;">Organization Logo:</h4>
-                    <uc-config
-                        ctx-name="my-uploader"
-                        source-list="local, camera, facebook, gdrive"
-                        multiple="false"
-                        camera-modes="photo, video"
-                        pubkey="d79c45e1617abf9520ed"
-                        removeCopyright="true"
-                        
-                    ></uc-config>
-                    <uc-file-uploader-regular ctx-name="my-uploader" class="uc-light"></uc-file-uploader-regular>
                     
-                    </div>
                     <br>
                     <button (click)="checkDate()" class="btn">Create Election</button>
                     <p>{{msg}}</p>
@@ -89,23 +76,20 @@
                                     <div class="portrait-container">
                                         <img class="portrait" src="img/BlockVote.png">
                                     </div>
-                                    <uc-config
-                                    ctx-name="my-uploader"
-                                    source-list="local, camera, facebook, gdrive"
-                                    multiple="false"
-                                    camera-modes="photo, video"
-                                    pubkey="d79c45e1617abf9520ed"
-                                    removeCopyright="true"
-                                    
-                                ></uc-config>
-                                <uc-file-uploader-regular ctx-name="my-uploader" class="uc-light" style="margin:289px;"></uc-file-uploader-regular>
+                                    <input style="margin-left: 289px;" className="form-control" type="file" accept=".jpg, .jpeg, .png, .bmp, .gif"/>
                                 
                                 <div style="margin: 1rem;display:flex;flex-direction: column;justify-content: center;">
                                     <h4>Candidate Name:</h4>
                                     <input type="text" [(ngModel)]="candidateName" style="height: 1.5rem">
                                     <br>
                                     <h4>Position:</h4>
-                                    <input type="text" [(ngModel)]="candidatePosition" style="height: 1.5rem">
+                                    <select name="position" id="position" [(ngModel)]="candidatePosition">
+                                        <option value="chairman">Chairman</option>
+                                        <option value="vice-chairman">Vice Chairman</option>
+                                        <option value="secretary">Secretary</option>
+                                        <option value="auditor">Auditor</option>
+                                        <option value="pio">P.I.O.</option>
+                                      </select>
                                     <br>
                                     <h4>Platform:</h4>
                                     <textarea [(ngModel)]="candidatePlatform" style="height: 10rem"></textarea>
@@ -138,22 +122,19 @@
                                         <div class="portrait-container">
                                             <img class="portrait" src="img/BlockVote.png">
                                         </div>
-                                        <uc-config
-                                        ctx-name="my-uploader"
-                                        source-list="local, camera, facebook, gdrive"
-                                        multiple="false"
-                                        camera-modes="photo, video"
-                                        pubkey="d79c45e1617abf9520ed"
-                                        removeCopyright="true"
-                                        
-                                    ></uc-config>
-                                    <uc-file-uploader-regular ctx-name="my-uploader" class="uc-light" style="margin: 289px;"></uc-file-uploader-regular>
+                                        <input style="margin-left: 289px;" className="form-control" type="file" accept=".jpg, .jpeg, .png, .bmp, .gif"/>
                                     <div style="margin: 1rem;display:flex;flex-direction: column;justify-content: center;">
                                         <h4>Candidate Name:</h4>
                                         <input type="text" [(ngModel)]="candidateNameUpdate" style="height: 1.5rem">
                                         <br>
                                         <h4>Position:</h4>
-                                        <input type="text" [(ngModel)]="candidatePositionUpdate" style="height: 1.5rem">
+                                        <select name="position" id="position" [(ngModel)]="candidatePositionUpdate">
+                                            <option value="chairman">Chairman</option>
+                                            <option value="vice-chairman">Vice Chairman</option>
+                                            <option value="secretary">Secretary</option>
+                                            <option value="auditor">Auditor</option>
+                                            <option value="pio">P.I.O.</option>
+                                          </select>
                                         <br>
                                         <h4>Platform:</h4>
                                         <textarea [(ngModel)]="candidatePlatformUpdate" style="height: 10rem"></textarea>

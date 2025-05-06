@@ -9,6 +9,8 @@ import * as UC from '@uploadcare/file-uploader';
 import '@uploadcare/file-uploader/web/uc-file-uploader-regular.min.css';
 import { MatDividerModule } from '@angular/material/divider';
 
+
+
 UC.defineComponents(UC);
 
 @Component({
@@ -19,11 +21,17 @@ UC.defineComponents(UC);
   styleUrl: './elections.component.css'
 })
 export class ElectionsComponent implements OnInit {
+
+
+
+  image = 'img/BlockVote.png';
+
   manage: number = 1;
   isLeftSidebarCollapsed = signal<boolean>(false);
   screenWidth = signal<number>(window.innerWidth);
   private blockchainService = inject(BlockchainService);
   router = inject(Router);
+  whatAmI: string = '';
 
   @HostListener('window:resize')
   onResize() {
@@ -34,7 +42,38 @@ export class ElectionsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.blockchainService.loadBlockchain();
+    try{
+      await this.blockchainService.loadBlockchain();
+      const isUser = await this.blockchainService.userExists(await this.blockchainService.getUserAddress());
+      const isOrg = await this.blockchainService.isOrg(await this.blockchainService.getUserAddress());
+      
+      if (isUser){
+        localStorage.clear();
+        localStorage.setItem('user', 'true');
+        this.whatAmI = 'Voter';
+        
+      }
+      else if (isOrg){
+        localStorage.clear();
+        localStorage.setItem('user', 'false');
+        this.whatAmI = 'Organizer';
+        
+      }
+      else{
+        localStorage.clear();
+        this.router.navigate(['/auth']);
+      }
+
+    }catch(e){
+      localStorage.clear();
+      this.whatAmI = '';
+      this.router.navigate(['/auth']);
+    }
+
+    if (this.whatAmI == ''){
+      localStorage.clear();
+      this.router.navigate(['/auth']);
+    }
     this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
     this.ownedElectionNames();
   }
@@ -91,6 +130,10 @@ export class ElectionsComponent implements OnInit {
 
 
   checkDate(){
+    if (this.electionName == '' || this.startDate == '' || this.endDate == '' || this.domainFilter == '') {
+      this.msg = 'Please fill required fields';
+      return;
+    }
     const startDate = new Date(this.startDate);
     const endDate = new Date(this.endDate);
     if(startDate < endDate){
@@ -208,6 +251,7 @@ export class ElectionsComponent implements OnInit {
   candidateNameTitle: string = '';
 
   async addCandidate() {
+    if (this.candidateName == '' || this.candidatePosition == '' || this.candidatePlatform == '') return;
     const electionID = this.electionIdTitle;
     await this.blockchainService.addCandidate(electionID, this.candidateName, this.candidatePosition, this.candidatePlatform);
     this.getCandidateNames();
@@ -248,7 +292,7 @@ export class ElectionsComponent implements OnInit {
   }
 
   async updateCandidateInfo(){
-
+    if (this.candidateNameUpdate == '' || this.candidatePositionUpdate == '' || this.candidatePlatformUpdate == '') return;
     const confirmUpdate = confirm('Are you sure you want to update this candidate?');
     if (confirmUpdate){
       await this.blockchainService.updateCandidate(this.electionIdTitle, this.candidates.indexOf(this.candidateNameTitle), this.candidateNameUpdate, this.candidatePositionUpdate, this.candidatePlatformUpdate);
