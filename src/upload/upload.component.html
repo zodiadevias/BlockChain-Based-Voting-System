@@ -1,0 +1,19 @@
+<div class="wrapper">
+    <uc-config
+        ctx-name="my-uploader"
+        source-list="local, camera"
+        pubkey="8c2eec6433dc523825fe"
+        multiple="false"
+        removeCopyright="true"
+    ></uc-config>
+    
+    <uc-file-uploader-regular
+        ctx-name="my-uploader"
+    ></uc-file-uploader-regular>
+
+    <uc-upload-ctx-provider
+        #ctxProvider
+        ctx-name="my-uploader"
+    ></uc-upload-ctx-provider>
+  
+</div>

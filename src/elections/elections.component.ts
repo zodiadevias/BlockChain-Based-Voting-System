@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA , ViewChild, ElementRef, NO_ERRORS_SCHEMA} from '@angular/core';
 import { inject, HostListener, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,12 @@ import { LeftSidebarComponent } from '../left-sidebar/left-sidebar.component';
 import * as UC from '@uploadcare/file-uploader';
 import '@uploadcare/file-uploader/web/uc-file-uploader-regular.min.css';
 import { MatDividerModule } from '@angular/material/divider';
+import { OutputFileEntry } from '@uploadcare/file-uploader';
+import { UploadComponent } from '../upload/upload.component';
+import { GlobalsService } from '../globals.service';
+import { Subscription, interval } from 'rxjs';
+
+
 
 
 
@@ -15,14 +21,15 @@ UC.defineComponents(UC);
 
 @Component({
   selector: 'app-elections',
-  imports: [CommonModule, FormsModule, LeftSidebarComponent, MatDividerModule],
+  imports: [CommonModule, FormsModule, LeftSidebarComponent, MatDividerModule, UploadComponent],
   templateUrl: './elections.component.html',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   styleUrl: './elections.component.css'
 })
 export class ElectionsComponent implements OnInit {
-
-
+  
+  files: any[] = [];
+  
 
   image = 'img/BlockVote.png';
 
@@ -30,6 +37,7 @@ export class ElectionsComponent implements OnInit {
   isLeftSidebarCollapsed = signal<boolean>(false);
   screenWidth = signal<number>(window.innerWidth);
   private blockchainService = inject(BlockchainService);
+  private globalsService = inject(GlobalsService);
   router = inject(Router);
   whatAmI: string = '';
 
@@ -40,9 +48,16 @@ export class ElectionsComponent implements OnInit {
       this.isLeftSidebarCollapsed.set(true);
     }
   }
+  
+  async ngDoCheck(){
+    this.cdn = this.globalsService.getCDN();
+  }
+
 
   async ngOnInit() {
+    
     try{
+      
       await this.blockchainService.loadBlockchain();
       const isUser = await this.blockchainService.userExists(await this.blockchainService.getUserAddress());
       const isOrg = await this.blockchainService.isOrg(await this.blockchainService.getUserAddress());
@@ -76,7 +91,17 @@ export class ElectionsComponent implements OnInit {
     }
     this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
     this.ownedElectionNames();
+
+
+    
+    
+    
   }
+
+
+
+  
+  
 
   changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
     this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
@@ -240,6 +265,11 @@ export class ElectionsComponent implements OnInit {
   }
 
 
+  getcdnurl(){
+    this.cdn = this.globalsService.getCDN();
+    console.log(this.cdn);
+  }
+
   candidateName: string = '';
   candidatePosition: string = '';
   candidatePlatform: string = '';
@@ -249,15 +279,21 @@ export class ElectionsComponent implements OnInit {
   candidatePositionUpdate: string = '';
   candidatePlatformUpdate: string = '';
   candidateNameTitle: string = '';
+  cdnUpdate: string = '';
+  cdn: string = '';
 
   async addCandidate() {
-    if (this.candidateName == '' || this.candidatePosition == '' || this.candidatePlatform == '') return;
+    if (this.candidateName == '' || this.candidatePosition == '' || this.candidatePlatform == '' || this.cdn == '') return;
     const electionID = this.electionIdTitle;
-    await this.blockchainService.addCandidate(electionID, this.candidateName, this.candidatePosition, this.candidatePlatform);
+    await this.blockchainService.addCandidate(electionID, this.candidateName, this.candidatePosition, this.candidatePlatform, this.globalsService.getCDN());
     this.getCandidateNames();
     this.candidateName = '';
     this.candidatePosition = '';
     this.candidatePlatform = '';
+    this.globalsService.postCDN('');
+    this.globalsService.resetcdn();
+    this.cdn = '';
+    
   }
 
   async toggleCandidateUpdateOn(name: string) {
@@ -266,6 +302,7 @@ export class ElectionsComponent implements OnInit {
     this.candidateNameUpdate = name;
     this.candidatePositionUpdate = await this.blockchainService.getCandidatePosition(this.electionIdTitle, this.candidates.indexOf(name));
     this.candidatePlatformUpdate = await this.blockchainService.getCandidatePlatform(this.electionIdTitle, this.candidates.indexOf(name));
+    this.cdnUpdate = await this.blockchainService.getCandidateCdn(this.electionIdTitle, this.candidates.indexOf(name));
   }
 
   async toggleCandidateUpdateOff() {
@@ -295,7 +332,7 @@ export class ElectionsComponent implements OnInit {
     if (this.candidateNameUpdate == '' || this.candidatePositionUpdate == '' || this.candidatePlatformUpdate == '') return;
     const confirmUpdate = confirm('Are you sure you want to update this candidate?');
     if (confirmUpdate){
-      await this.blockchainService.updateCandidate(this.electionIdTitle, this.candidates.indexOf(this.candidateNameTitle), this.candidateNameUpdate, this.candidatePositionUpdate, this.candidatePlatformUpdate);
+      await this.blockchainService.updateCandidate(this.electionIdTitle, this.candidates.indexOf(this.candidateNameTitle), this.candidateNameUpdate, this.candidatePositionUpdate, this.candidatePlatformUpdate, this.globalsService.getCDN());
       this.getCandidateNames();
       this.toggleCandidateUpdateOff();
     }

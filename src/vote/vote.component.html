@@ -3,5 +3,115 @@
   (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
 />
 <div class="body" [ngClass]="sizeClass()">
-    <p>vote</p>
+  <div>
+    <h3 style="padding-top: 1rem;">Vote</h3>
+    <hr style="margin-left: -5rem;">
+</div>
+    @if(join){
+      <div class="box-container-full">
+        <h3 class="box-title">Join Election</h3>
+        <div class="box-no-scroll">
+          <h4>Enter Election ID:</h4>
+          <input type="text" [(ngModel)]="electionID">
+          <button (click)="viewElection(electionID)">Join</button>
+          <p>{{msg}}</p>
+        </div>
+      </div>
+    }
+    @if(vote){
+      <div class="box-container-full">
+        <h3 class="box-title">ID:[{{electionID}}] Name:[{{electionName}}]</h3>
+        <div class="box-no-scroll">
+        <button class="btn-ctrl" (click)="toggle = 'vote'">Vote</button>
+        <button class="btn-ctrl" (click)="toggle = 'details'">Details</button>
+        <button class="btn-ctrl" (click)="exitElection()">Exit</button>
+        @if(toggle == 'vote'){
+          <div class="box">
+            <h1 style="text-align: center;">Cast your vote</h1>
+            
+            <h4 class="vote-head">Chairman</h4>
+
+            <mat-list>  
+              <mat-list-item class="list-item" *ngFor="let chairman of chairmans; let i = index" >
+                <h4 style="text-align: center;" class="btn-list">{{chairman}}</h4><br>
+                <img src="{{chairimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);">
+                
+                <br>
+                <p>Votes: {{chairmanVotes[i]}}</p>
+                
+                <mat-radio-button name="chairman" value="{{chairman}}" [(NgModel)]="votedChairman"></mat-radio-button>
+              </mat-list-item>
+            </mat-list>
+
+            <h4 class="vote-head">Vice Chairman</h4>
+
+            <mat-list>  
+              <mat-list-item class="list-item" *ngFor="let vchairman of vChairmans; let i = index" >
+                <h4 style="text-align: center;" class="btn-list">{{vchairman}}</h4><br>
+                <img src="{{vchairimgs[i]}}"style="width: 100px;height:100px;transform: translateX(50%);"><br>
+                <p>Votes: {{vChairmanVotes[i]}}</p>
+                  <mat-radio-button name="vchairman" value={{vchairman}}></mat-radio-button>
+                
+                
+                
+              </mat-list-item>
+            </mat-list>
+
+            <h4 class="vote-head">Secretary</h4>
+
+            <mat-list>  
+              <mat-list-item class="list-item" *ngFor="let secretary of secretarys; let i = index" >
+                <h4 style="text-align: center;" class="btn-list">{{secretary}}</h4><br>
+                <img src="{{secretaryimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
+                    <p>Votes: {{secretaryVotes[i]}}</p>
+                    <mat-radio-button name="secretary" value="{{secretary}}"></mat-radio-button>
+                    
+              </mat-list-item>
+            </mat-list>
+
+            <h4 class="vote-head">Auditor</h4>
+
+            <mat-list>  
+              <mat-list-item class="list-item" *ngFor="let auditor of auditors; let i = index" >
+                <h4 style="text-align: center;" class="btn-list">{{auditor}}</h4><br>
+                <img src="{{auditorimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
+                <p>Votes: {{auditorVotes[i]}}</p>
+                    <mat-radio-button name="auditor" value="{{auditor}}"></mat-radio-button>
+                    
+              </mat-list-item>
+            </mat-list>
+
+            <h4 class="vote-head">P.I.O.</h4>
+
+            <mat-list>  
+              <mat-list-item class="list-item" *ngFor="let pio of pios; let i = index" >
+                <h4 style="text-align: center;" class="btn-list">{{pio}}</h4><br>
+                <img src="{{pioimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
+                  <p>Votes: {{pioVotes[i]}}</p>
+                  <mat-radio-button name="pio" value="{{pio}}"></mat-radio-button>
+                  
+              </mat-list-item>
+            </mat-list>
+            <mat-divider></mat-divider>
+            <p>{{errormsg}}</p>
+            <button (click)="submitVote()">Submit</button>
+
+          </div>
+        }
+        @if(toggle == 'details'){
+          <div>
+            <h4>Election Name:</h4>
+            <p>{{electionName}}</p>
+            <h4>Start Date:</h4>
+            <p>{{startDate}}</p>
+            <h4>End Date:</h4>
+            <p>{{endDate}}</p>
+            
+          </div>
+        }
+        
+        </div>
+      </div>
+    }
+    
 </div>

@@ -7,6 +7,7 @@
     <div>
         <h3 style="padding-top: 1rem;">Manage Elections</h3>
         <hr style="margin-left: -5rem;">
+        
     </div>
 
     @if(manage == 1){
@@ -25,7 +26,10 @@
                     <input type="datetime-local" [(ngModel)]="endDate">
                     <br>
                     <h4>Domain Filter:</h4>
-                    <input type="text" [(ngModel)]="domainFilter">
+                    <input type="text" [(ngModel)]="domainFilter" placeholder="example: @domain.com, type 'any' for any domain">
+                   
+                    
+                    
                     <br>
                     
                     <br>
@@ -73,10 +77,23 @@
                             <div class="box-container" style="margin-top: 10px;height: 740px">
                                 <h3 class="box-title">Add Candidate</h3>
                                 <div class="box-no-scroll">
+
                                     <div class="portrait-container">
-                                        <img class="portrait" src="img/BlockVote.png">
+                                        @if(cdn == ''){
+                                            <img class="portrait" src="img/BlockVote.png">
+                                        }@else {
+                                            <img class="portrait" src="{{cdn}}">
+                                        }
+                                        
                                     </div>
-                                    <input style="margin-left: 289px;" className="form-control" type="file" accept=".jpg, .jpeg, .png, .bmp, .gif"/>
+                                    <app-upload></app-upload>
+                                    <!-- <div class="portrait-container">
+                                        <img *ngFor="let file of files" src="{{ file.cdnUrl }}" width="100px">
+                                    </div> -->
+                                    <!-- <input style="margin-left: 289px;" className="form-control" type="file" accept=".jpg, .jpeg, .png, .bmp, .gif"/> -->
+                                
+                                    
+                                
                                 
                                 <div style="margin: 1rem;display:flex;flex-direction: column;justify-content: center;">
                                     <h4>Candidate Name:</h4>
@@ -120,9 +137,9 @@
                                     <button class="close" (click)="toggleCandidateUpdateOff()" style="background-color: rgb(39, 39, 39);color:white;">Cancel</button>
                                     <div class="box-no-scroll" style="height:90%;">
                                         <div class="portrait-container">
-                                            <img class="portrait" src="img/BlockVote.png">
+                                            <img class="portrait" src="{{cdnUpdate}}">
+
                                         </div>
-                                        <input style="margin-left: 289px;" className="form-control" type="file" accept=".jpg, .jpeg, .png, .bmp, .gif"/>
                                     <div style="margin: 1rem;display:flex;flex-direction: column;justify-content: center;">
                                         <h4>Candidate Name:</h4>
                                         <input type="text" [(ngModel)]="candidateNameUpdate" style="height: 1.5rem">

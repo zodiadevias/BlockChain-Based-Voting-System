@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
 
-const contractAddress = '0xF99038505579345E6D8df678d30A0a345670eB79';
+const contractAddress = '0x1572f9DFC54149F5141ECf5e88775DC7DBb76D93';
 const contractABI: any = [
   {
     "inputs": [],
@@ -565,6 +565,11 @@ const contractABI: any = [
         "internalType": "string",
         "name": "_platform",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_cdn",
+        "type": "string"
       }
     ],
     "name": "addCandidate",
@@ -599,6 +604,11 @@ const contractABI: any = [
       {
         "internalType": "string",
         "name": "_newPlatform",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_newcdn",
         "type": "string"
       }
     ],
@@ -734,6 +744,32 @@ const contractABI: any = [
         "internalType": "uint256",
         "name": "_electionId",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_candidateIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCandidateCdn",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_electionId",
+        "type": "uint256"
       }
     ],
     "name": "getCandidateNames",
@@ -742,6 +778,58 @@ const contractABI: any = [
         "internalType": "string[]",
         "name": "",
         "type": "string[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_electionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_candidateName",
+        "type": "string"
+      }
+    ],
+    "name": "getCandidateIDbyName",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_electionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_candidateIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCandidateVoteCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -1160,9 +1248,9 @@ export class BlockchainService {
 
   //Candidate
 
-  async addCandidate(electionID: number, candidateName: string, position: string, platform: string){
+  async addCandidate(electionID: number, candidateName: string, position: string, platform: string, cdn: string){
     if (!this.contract) return;
-    const tx = await (this.contract as any).addCandidate(electionID, candidateName, position, platform);
+    const tx = await (this.contract as any).addCandidate(electionID, candidateName, position, platform, cdn);
     await tx.wait();
   }
 
@@ -1203,17 +1291,46 @@ export class BlockchainService {
     return result;
   }
 
+  async getCandidateCdn(electionID: number, candidateID: number){
+    if (!this.contract) return;
+    const result = await (this.contract as any).getCandidateCdn(electionID, candidateID);
+    return result;
+  }
+
   async deleteCandidate(electionID: number, candidateID: number){
     if (!this.contract) return;
     const tx = await (this.contract as any).deleteCandidate(electionID, candidateID);
     await tx.wait();
   }
 
-  async updateCandidate(electionID: number, candidateID: number, candidateName: string, position: string, platform: string){
+  async updateCandidate(electionID: number, candidateID: number, candidateName: string, position: string, platform: string, cdn: string){
     if (!this.contract) return;
-    const tx = await (this.contract as any).updateCandidateInfo(electionID, candidateID, candidateName, position, platform);
+    const tx = await (this.contract as any).updateCandidateInfo(electionID, candidateID, candidateName, position, platform, cdn);
     await tx.wait();
   }
+
+  async getCandidateIDByName(electionID: number, candidateName: string): Promise<number> {
+    if (!this.contract) return -1;
+    try {
+      const result = await (this.contract as any).getCandidateIDbyName(electionID, candidateName);
+      return result;
+    } catch (error) {
+      console.error("Error getting candidate ID:", error);
+      return -1;
+    }
+  }
+
+async getCandidateVoteCount(electionID: number, candidateID: number): Promise<number> {
+  if (!this.contract) return 0;
+  try {
+    const result = await (this.contract as any).getCandidateVoteCount(electionID, candidateID);
+    return result;
+  } catch (error) {
+    console.error("Error getting candidate vote count:", error);
+    return 0;
+  }
+}
+
 
   
 
@@ -1359,7 +1476,16 @@ export class BlockchainService {
     }
   }
 
-  
+async vote(electionId: number, candidateIndexes: number[]): Promise<void> {
+  if (!this.contract) return;
+  try {
+    const tx = await (this.contract as any).Vote(electionId, candidateIndexes);
+    await tx.wait();
+  } catch (error) {
+    console.error("Error voting for multiple candidates:", error);
+  }
+}
+
 
 
 }

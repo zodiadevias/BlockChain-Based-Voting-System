@@ -21,6 +21,8 @@ export class AuthComponent {
   public organizer = false;
   public success = '';
 
+  
+
   isOtp = false;
   otp = '';
   randomOTP: number = Math.floor(Math.random() * 10000);
@@ -37,6 +39,7 @@ export class AuthComponent {
     // }
   }
 
+  
   toggleOTP(){
     this.isOtp = true;
     this.randomOTP = Math.floor(Math.random() * 10000);
@@ -49,6 +52,7 @@ export class AuthComponent {
     emailjs.send('blockvote', 'template_q1zygbv', templateParams, 'M-Lel7Aav1F3ztGZV')
     .then((response) => {
       console.log('SUCCESS!', response.status, response.text);
+
     })
     .catch((err) => {
       console.log('FAILED...', err);

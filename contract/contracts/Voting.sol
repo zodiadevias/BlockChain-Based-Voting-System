@@ -37,6 +37,7 @@ contract DecentralizedVoting {
         string name;
         string position;
         string platform;
+        string cdn;
         uint256 voteCount;
     }
 
@@ -229,17 +230,17 @@ contract DecentralizedVoting {
 
 
     // Add a candidate to an election (only owner)
-    function addCandidate(uint256 _electionId, string memory _candidateName, string memory _candidatePosition, string memory _platform) public onlyOrg {
+    function addCandidate(uint256 _electionId, string memory _candidateName, string memory _candidatePosition, string memory _platform, string memory _cdn) public onlyOrg {
         require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
         require(elections[_electionId].active, "Election is not active");
 
-        elections[_electionId].candidates.push(Candidate({ name: _candidateName, voteCount: 0 , position: _candidatePosition , platform: _platform}));
+        elections[_electionId].candidates.push(Candidate({ name: _candidateName, voteCount: 0 , position: _candidatePosition , platform: _platform, cdn: _cdn}));
         emit CandidateAdded(_electionId, _candidateName);
     }
 
     
     // Update candidate information
-    function updateCandidateInfo(uint256 _electionId, uint256 _candidateIndex, string memory _newName, string memory _newPosition, string memory _newPlatform) public onlyOrg {
+    function updateCandidateInfo(uint256 _electionId, uint256 _candidateIndex, string memory _newName, string memory _newPosition, string memory _newPlatform, string memory _newcdn) public onlyOrg {
         require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
         require(_candidateIndex < elections[_electionId].candidates.length, "Candidate does not exist");
         
@@ -255,6 +256,10 @@ contract DecentralizedVoting {
         
         if (keccak256(bytes(candidate.platform)) != keccak256(bytes(_newPlatform))) {
             candidate.platform = _newPlatform;
+        }
+
+        if (keccak256(bytes(candidate.cdn)) != keccak256(bytes(_newcdn))) {
+            candidate.cdn = _newcdn;
         }
         
         // TODO: update the event
@@ -307,6 +312,13 @@ contract DecentralizedVoting {
         return elections[_electionId].candidates[_candidateIndex].platform;
     }
 
+    function getCandidateCdn(uint256 _electionId, uint256 _candidateIndex) public view returns (string memory) {
+        require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
+        require(_candidateIndex < elections[_electionId].candidates.length, "Candidate does not exist");
+        return elections[_electionId].candidates[_candidateIndex].cdn;
+    }
+
+
     //get candidate names
     function getCandidateNames(uint256 _electionId) public view returns (string[] memory) {
         require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
@@ -319,6 +331,29 @@ contract DecentralizedVoting {
         }
 
         return candidateNames;
+    }
+
+    
+    //get candidate ID by name
+    function getCandidateIDbyName(uint256 _electionId, string memory _candidateName) public view returns (uint256) {
+        require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
+
+        uint256 candidateCount = elections[_electionId].candidates.length;
+        for (uint256 i = 0; i < candidateCount; i++) {
+            if (keccak256(bytes(elections[_electionId].candidates[i].name)) == keccak256(bytes(_candidateName))) {
+                return i;
+            }
+        }
+        return candidateCount;
+    }
+
+
+    
+    //get candidate votecount
+    function getCandidateVoteCount(uint256 _electionId, uint256 _candidateIndex) public view returns (uint256) {
+        require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
+        require(_candidateIndex < elections[_electionId].candidates.length, "Candidate does not exist");
+        return elections[_electionId].candidates[_candidateIndex].voteCount;
     }
     //end candidate
 
@@ -405,20 +440,6 @@ contract DecentralizedVoting {
         return deployer;
     }
 
-    // // Vote for a candidate in an election
-    // function vote(uint256 _electionId, uint256 _candidateIndex) public {
-    //     require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
-    //     Election storage election = elections[_electionId];
-
-    //     require(election.active, "Election is not active");
-    //     //require(!election.hasVoted[msg.sender], "You have already voted");
-
-    //     election.candidates[_candidateIndex].voteCount++;
-    //     election.hasVoted[msg.sender] = true;
-
-    //     emit Voted(_electionId, _candidateIndex, msg.sender);
-    // }
-
     
     // Vote for multiple candidates in an election
     function Vote(uint256 _electionId, uint256[] memory _candidateIndexes) public {
@@ -426,7 +447,7 @@ contract DecentralizedVoting {
         Election storage election = elections[_electionId];
 
         require(election.active, "Election is not active");
-        //require(!election.hasVoted[msg.sender], "You have already voted");
+        require(!election.hasVoted[msg.sender], "You have already voted");
 
         for (uint256 i = 0; i < _candidateIndexes.length; i++) {
             election.candidates[_candidateIndexes[i]].voteCount++;
