@@ -25,12 +25,12 @@ ng add @angular/material
 npm install --save @emailjs/browser
 ```
 
-5 . Install UploadCare
+5. Install UploadCare
 ```bash
 npm i @uploadcare/file-uploader
 ```
 
-5. Install Ganache
+6. Install Ganache
 link: https://archive.trufflesuite.com/ganache/
 
 
