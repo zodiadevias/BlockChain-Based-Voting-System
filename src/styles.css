@@ -6,7 +6,7 @@ body{
     background-color: #272635;
     font-family: 'Alumni Sans';
     color: white;
-    background-image: url("/img/background.svg");
+    background-image: url("./img/background.svg");
     background-size: cover;
     background-attachment: fixed;
     
