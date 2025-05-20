@@ -120,6 +120,24 @@ export class VoteComponent implements OnInit {
   
 
   async viewElection(electionID: number){
+
+    const endDate = await this.BlockchainService.getElectionEndDate(electionID);
+    const date = new Date(endDate);
+    const status = await this.BlockchainService.getElectionStatus(electionID);
+    
+    
+    if(status == true){
+      this.msg = 'Results are not yet released.';
+      return;
+    }
+
+    if(date < new Date()){
+      this.msg = 'Election is over. Please check results';
+      return;
+    }
+
+    
+
     this.getVoteCount();
     await this.BlockchainService.loadBlockchain();
     this.getCandidateNames();

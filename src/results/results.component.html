@@ -4,8 +4,143 @@
 />
 
 <div class="body" [ngClass]="sizeClass()">
-  <div>
-    <h3 style="padding-top: 1rem;">Election Results</h3>
-    <hr style="margin-left: -5rem;">
+  @if(isOrg){
+      @if(toggle == 1){
+        <div>
+            <h3 style="padding-top: 1rem;">Election Results</h3>
+            <hr style="margin-left: -5rem;">
+        </div>
+        <div class="results">
+          <h1>Election Results</h1>
+          <h3>Enter Election ID:</h3>
+          <input type="text" [(ngModel)]="electionID" (click)="clearfields()">
+          <button (click)="results()">Check Results</button>
+          <p>{{msg}}</p>
+        </div>
+
+        <div class="end">
+          <h3>Close Election:</h3>
+          <input type="text" [(ngModel)]="closeElectionID" (click)="clearfields()">
+          <button (click)="closeElection(closeElectionID)">End</button>
+          <p>{{clsmsg}}</p>
+        </div>
+        }
+
+        @if(toggle == 2){
+        <div class="with-back">
+            <button class="back" (click)="toggle = 1">Back</button>
+            <h3 style="padding-top: 1rem;">Election Results</h3>
+            
+        </div>
+        <hr style="margin-left: -5rem;">
+          <div class="box-container-full">
+            <div class="box-title"><h3 >Elected Candidates</h3></div>
+            <div class="box-no-scroll">
+              <div class="electionid">
+                <h1>Election ID: {{electionID}}</h1>
+                <h1>Election Name: {{electionName}}</h1>
+                <h1>Status: Closed</h1>
+              </div>
+              
+              <table>
+                <th>Chairman</th>
+                <th>Vice Chairman</th>
+                <th>Secretary</th>
+                <th>Auditor</th>
+                <th>P.I.O</th>
+                <tr>
+                  <td><img class="portrait" src="{{chairimg}}"></td>
+                  <td><img class="portrait" src="{{vchairimg}}"></td>
+                  <td><img class="portrait" src="{{secretaryimg}}"></td>
+                  <td><img class="portrait" src="{{auditorimg}}"></td>
+                  <td><img class="portrait" src="{{pioimg}}"></td>
+                </tr>
+                <tr>
+                  <td>Name: {{electedChairman}}</td>
+                  <td>Name: {{electedViceChairman}}</td>
+                  <td>Name: {{electedSecretary}}</td>
+                  <td>Name: {{electedAuditor}}</td>
+                  <td>Name: {{electedPIO}}</td>
+                </tr>
+                <tr>
+                  <td>Total Votes: {{chairmanWin}}</td>
+                  <td>Total Votes: {{viceChairmanWin}}</td>
+                  <td>Total Votes: {{secretaryWin}}</td>
+                  <td>Total Votes: {{auditorWin}}</td>
+                  <td>Total Votes: {{pioWin}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        }
+  }
+
+  @if(isUser){
+    @if(toggle == 1){
+        <div>
+            <h3 style="padding-top: 1rem;">Election Results</h3>
+            <hr style="margin-left: -5rem;">
+        </div>
+        <div class="results">
+          <h1>Election Results</h1>
+          <h3>Enter Election ID:</h3>
+          <input type="text" [(ngModel)]="electionID" (click)="clearfields()">
+          <button (click)="results()">Check Results</button>
+          <p>{{msg}}</p>
+        </div>
+        }
+
+        @if(toggle == 2){
+        <div class="with-back">
+            <button class="back" (click)="toggle = 1">Back</button>
+            <h3 style="padding-top: 1rem;">Election Results</h3>
+            
+        </div>
+        <hr style="margin-left: -5rem;">
+          <div class="box-container-full">
+            <div class="box-title"><h3 >Elected Candidates</h3></div>
+            <div class="box-no-scroll">
+              <div class="electionid">
+                <h1>Election ID: {{electionID}}</h1>
+                <h1>Election Name: {{electionName}}</h1>
+                <h1>Status: Closed</h1>
+              </div>
+              
+              <table>
+                <th>Chairman</th>
+                <th>Vice Chairman</th>
+                <th>Secretary</th>
+                <th>Auditor</th>
+                <th>P.I.O</th>
+                <tr>
+                  <td><img class="portrait" src="{{chairimg}}"></td>
+                  <td><img class="portrait" src="{{vchairimg}}"></td>
+                  <td><img class="portrait" src="{{secretaryimg}}"></td>
+                  <td><img class="portrait" src="{{auditorimg}}"></td>
+                  <td><img class="portrait" src="{{pioimg}}"></td>
+                </tr>
+                <tr>
+                  <td>Name: {{electedChairman}}</td>
+                  <td>Name: {{electedViceChairman}}</td>
+                  <td>Name: {{electedSecretary}}</td>
+                  <td>Name: {{electedAuditor}}</td>
+                  <td>Name: {{electedPIO}}</td>
+                </tr>
+                <tr>
+                  <td>Total Votes: {{chairmanWin}}</td>
+                  <td>Total Votes: {{viceChairmanWin}}</td>
+                  <td>Total Votes: {{secretaryWin}}</td>
+                  <td>Total Votes: {{auditorWin}}</td>
+                  <td>Total Votes: {{pioWin}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        }
+  }
+  
+  
 </div>
-    </div>
+
+
+

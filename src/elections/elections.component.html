@@ -7,12 +7,9 @@
     <div>
         <h3 style="padding-top: 1rem;">Manage Elections</h3>
         <hr style="margin-left: -5rem;">
-        
     </div>
-
     @if(manage == 1){
-        <div class="flex-container">
-            
+        <div class="flex-container"> 
             <div class="box-container">
                 <h3 class="box-title">Create Election</h3>
                 <div class="flexbox">
@@ -26,31 +23,18 @@
                     <input type="datetime-local" [(ngModel)]="endDate">
                     <br>
                     <h4>Domain Filter:</h4>
-                    <input type="text" [(ngModel)]="domainFilter" placeholder="example: @domain.com, type 'any' for any domain">
-                   
-                    
-                    
+                    <input type="text" [(ngModel)]="domainFilter" placeholder="example: @domain.com, type 'any' for any domain">    
                     <br>
-                    
                     <br>
                     <button (click)="checkDate()" class="btn">Create Election</button>
                     <p>{{msg}}</p>
                 </div>
-                
-                
             </div>
-            
-            
             <div class="box-container" style="margin-right: 3rem;">
             <h3 class="box-title">Election List</h3>
-            
             <div class="box">
-                
                 <mat-list *ngIf="elections.length > 0; else noElections">
-                    
                     <mat-list-item class="list-item" *ngFor="let election of ownedElections; let i = index" ><h4 style="text-align: center;" class="btn-list" (click)="viewElection(election)">{{election}}</h4><mat-divider></mat-divider></mat-list-item>
-                    
-                    <!-- figuring out how to filter the list -->
                   </mat-list>
                   <ng-template #noElections>
                     <button (click)="ownedElectionNames()" class="btn-refresh">Click here to refresh list</button>
@@ -59,9 +43,7 @@
             </div>
         </div>
     }
-
-    @if(manage == 2){
-            
+    @if(manage == 2){       
             <div class="box-container-full">
                 <div class="box-title"><h3>[ID: {{electionIdTitle}}] [Election Name: {{_electionName}}]</h3></div>
                     <div class="box-padding">
@@ -71,7 +53,6 @@
                         <button class="btn-manage" (click)="toggleWindow('details')">Election Details</button>
                         <button class="btn-manage" style="width: 100px;background-color: red;color:black" (click)="manage = 1; toggleCandidateUpdateOff()" >CLOSE</button>
                     </div>
-
                     @if(toggleWindowManager == 'candidates'){
                         <div class="manage-flex">
                             <div class="box-container" style="margin-top: 10px;height: 740px">
@@ -87,36 +68,26 @@
                                         
                                     </div>
                                     <app-upload></app-upload>
-                                    <!-- <div class="portrait-container">
-                                        <img *ngFor="let file of files" src="{{ file.cdnUrl }}" width="100px">
-                                    </div> -->
-                                    <!-- <input style="margin-left: 289px;" className="form-control" type="file" accept=".jpg, .jpeg, .png, .bmp, .gif"/> -->
-                                
-                                    
-                                
-                                
-                                <div style="margin: 1rem;display:flex;flex-direction: column;justify-content: center;">
-                                    <h4>Candidate Name:</h4>
-                                    <input type="text" [(ngModel)]="candidateName" style="height: 1.5rem">
-                                    <br>
-                                    <h4>Position:</h4>
-                                    <select name="position" id="position" [(ngModel)]="candidatePosition">
-                                        <option value="chairman">Chairman</option>
-                                        <option value="vice-chairman">Vice Chairman</option>
-                                        <option value="secretary">Secretary</option>
-                                        <option value="auditor">Auditor</option>
-                                        <option value="pio">P.I.O.</option>
-                                      </select>
-                                    <br>
-                                    <h4>Platform:</h4>
-                                    <textarea [(ngModel)]="candidatePlatform" style="height: 10rem"></textarea>
-                                    <br>
-                                    <button class="btn" (click)="addCandidate()">Add Candidate</button>
-                                </div>
-                                
+                                    <div style="margin: 1rem;display:flex;flex-direction: column;justify-content: center;">
+                                        <h4>Candidate Name:</h4>
+                                        <input type="text" [(ngModel)]="candidateName" style="height: 1.5rem">
+                                        <br>
+                                        <h4>Position:</h4>
+                                        <select name="position" id="position" [(ngModel)]="candidatePosition">
+                                            <option value="chairman">Chairman</option>
+                                            <option value="vice-chairman">Vice Chairman</option>
+                                            <option value="secretary">Secretary</option>
+                                            <option value="auditor">Auditor</option>
+                                            <option value="pio">P.I.O.</option>
+                                        </select>
+                                        <br>
+                                        <h4>Platform:</h4>
+                                        <textarea [(ngModel)]="candidatePlatform" style="height: 10rem"></textarea>
+                                        <br>
+                                        <button class="btn" (click)="addCandidate()">Add Candidate</button>
+                                    </div>
                                 </div>
                             </div>
-                            
                             @if(!updateCandidate){
                                 <div class="box-container" style="margin-top: 10px;height: 740px;">
                                     <h3 class="box-title">Candidate List</h3>
@@ -138,7 +109,6 @@
                                     <div class="box-no-scroll" style="height:90%;">
                                         <div class="portrait-container">
                                             <img class="portrait" src="{{cdnUpdate}}">
-
                                         </div>
                                     <div style="margin: 1rem;display:flex;flex-direction: column;justify-content: center;">
                                         <h4>Candidate Name:</h4>
@@ -155,17 +125,12 @@
                                         <br>
                                         <h4>Platform:</h4>
                                         <textarea [(ngModel)]="candidatePlatformUpdate" style="height: 10rem"></textarea>
-                                        
                                     </div>
                                     </div>
                                 </div>
                             }
-                            
-                            
                         </div>
-                        
                     }
-                    
                     @if(toggleWindowManager == 'update'){
                         <div>
                             <h4>Election Name:</h4>
@@ -182,7 +147,6 @@
                             <button (click)="updateElection()">Update</button>
                         </div>
                     }
-
                     @if(toggleWindowManager == 'details'){
                         <div>
                             <h4>Election ID: {{electionIdTitle}}</h4>
@@ -190,11 +154,8 @@
                             <h4>Start Date: {{_startDate}}</h4>
                             <h4>End Date: {{_endDate}}</h4>
                             <h4>Allowed Domain: {{_domainFilter}}</h4>
-                            
-                            
                         </div>
                     }
-
                 </div>
                 
             
@@ -204,3 +165,4 @@
     }
 
 </div>
+

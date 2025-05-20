@@ -13,10 +13,6 @@ import { UploadComponent } from '../upload/upload.component';
 import { GlobalsService } from '../globals.service';
 import { Subscription, interval } from 'rxjs';
 
-
-
-
-
 UC.defineComponents(UC);
 
 @Component({
@@ -27,20 +23,6 @@ UC.defineComponents(UC);
   styleUrl: './elections.component.css'
 })
 export class ElectionsComponent implements OnInit {
-  
-  files: any[] = [];
-  
-
-  image = 'img/BlockVote.png';
-
-  manage: number = 1;
-  isLeftSidebarCollapsed = signal<boolean>(false);
-  screenWidth = signal<number>(window.innerWidth);
-  private blockchainService = inject(BlockchainService);
-  private globalsService = inject(GlobalsService);
-  router = inject(Router);
-  whatAmI: string = '';
-
   @HostListener('window:resize')
   onResize() {
     this.screenWidth.set(window.innerWidth);
@@ -48,6 +30,44 @@ export class ElectionsComponent implements OnInit {
       this.isLeftSidebarCollapsed.set(true);
     }
   }
+
+  files: any[] = [];
+  manage: number = 1;
+  isLeftSidebarCollapsed = signal<boolean>(false);
+  screenWidth = signal<number>(window.innerWidth);
+  private blockchainService = inject(BlockchainService);
+  private globalsService = inject(GlobalsService);
+  router = inject(Router);
+  whatAmI: string = '';
+  elections: any[] = [];
+  ownedElections: string[] = [];
+  electionName: string = '';
+  _electionName: string = '';
+  startDate: string = '';
+  endDate: string = '';
+  domainFilter: string = '';
+  _startDate: string = '';
+  _endDate: string = '';
+  _domainFilter: string = '';
+  new_electionName: string = '';
+  new_startDate: string = '';
+  new_endDate: string = '';
+  new_domainFilter: string = '';
+  toggleWindowManager: string = 'candidates';
+  address: string = '';
+  msg: string = '';
+  candidateName: string = '';
+  candidatePosition: string = '';
+  candidatePlatform: string = '';
+  candidates: any[] = [];
+  updateCandidate: boolean = false;
+  candidateNameUpdate: string = '';
+  candidatePositionUpdate: string = '';
+  candidatePlatformUpdate: string = '';
+  candidateNameTitle: string = '';
+  cdnUpdate: string = '';
+  cdn: string = '';
+  electionIdTitle: number = 0;
   
   async ngDoCheck(){
     this.cdn = this.globalsService.getCDN();
@@ -55,53 +75,37 @@ export class ElectionsComponent implements OnInit {
 
 
   async ngOnInit() {
-    
     try{
-      
       await this.blockchainService.loadBlockchain();
       const isUser = await this.blockchainService.userExists(await this.blockchainService.getUserAddress());
       const isOrg = await this.blockchainService.isOrg(await this.blockchainService.getUserAddress());
-      
       if (isUser){
         localStorage.clear();
         localStorage.setItem('user', 'true');
         this.whatAmI = 'Voter';
-        
       }
       else if (isOrg){
         localStorage.clear();
         localStorage.setItem('user', 'false');
         this.whatAmI = 'Organizer';
-        
       }
       else{
         localStorage.clear();
         this.router.navigate(['/auth']);
       }
-
     }catch(e){
       localStorage.clear();
       this.whatAmI = '';
       this.router.navigate(['/auth']);
     }
-
     if (this.whatAmI == ''){
       localStorage.clear();
       this.router.navigate(['/auth']);
     }
     this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
     this.ownedElectionNames();
-
-
-    
-    
-    
   }
 
-
-
-  
-  
 
   changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
     this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
@@ -114,26 +118,6 @@ export class ElectionsComponent implements OnInit {
     }
     return this.screenWidth() > 768 ? 'body-trimmed' : 'body-md-screen';
   });
-
-  elections: any[] = [];
-  ownedElections: string[] = [];
-  electionName: string = '';
-  _electionName: string = '';
-  startDate: string = '';
-  endDate: string = '';
-  domainFilter: string = '';
-
-  _startDate: string = '';
-  _endDate: string = '';
-  _domainFilter: string = '';
-  new_electionName: string = '';
-  new_startDate: string = '';
-  new_endDate: string = '';
-  new_domainFilter: string = '';
-
-  toggleWindowManager: string = 'candidates';
-  address: string = '';
-  msg: string = '';
 
   async toggleWindow(window: string) {
     this.toggleWindowManager = window;
@@ -151,8 +135,6 @@ export class ElectionsComponent implements OnInit {
       this.new_domainFilter = this._domainFilter;
     }
   }
-
-
 
   checkDate(){
     if (this.electionName == '' || this.startDate == '' || this.endDate == '' || this.domainFilter == '') {
@@ -205,23 +187,21 @@ export class ElectionsComponent implements OnInit {
       this.manage = 1;
     }
   }
-
-  
-  
-
-  electionIdTitle: number = 0;
-
   async viewElection(name: string) {
     this.elections = await this.blockchainService.getElectionNames();
     const electionID: number = Number(await this.getOwnedElectionIDbyName(name));
+    const endDate = await this.blockchainService.getElectionEndDate(electionID);
+    const date = new Date();
+    if(date > new Date(endDate)){
+      alert('Election ended at ' + new Date(endDate) + ', you cannot edit this election.');
+      return;
+    }
     this.electionIdTitle = electionID;
     this._electionName = this.elections[electionID - 1];
     console.log(this.electionName);
     this.getCandidateNames();
     this.manage = 2;
   }
-
-
 
   async getOwnedElectionIDbyName(name: string) {
     return await this.blockchainService.getElectionIDbyName(name);
@@ -257,30 +237,15 @@ export class ElectionsComponent implements OnInit {
   async updateElectionDetails() {
     this.blockchainService.updateElectionDetails(this.electionIdTitle, this.new_electionName, this.new_startDate, this.new_endDate, this.new_domainFilter);
   }
-
-
-
   async getAddress() {
     this.address = await this.blockchainService.getUserAddress();
   }
-
-
   getcdnurl(){
     this.cdn = this.globalsService.getCDN();
     console.log(this.cdn);
   }
 
-  candidateName: string = '';
-  candidatePosition: string = '';
-  candidatePlatform: string = '';
-  candidates: any[] = [];
-  updateCandidate: boolean = false;
-  candidateNameUpdate: string = '';
-  candidatePositionUpdate: string = '';
-  candidatePlatformUpdate: string = '';
-  candidateNameTitle: string = '';
-  cdnUpdate: string = '';
-  cdn: string = '';
+  
 
   async addCandidate() {
     if (this.candidateName == '' || this.candidatePosition == '' || this.candidatePlatform == '' || this.cdn == '') return;
@@ -339,4 +304,7 @@ export class ElectionsComponent implements OnInit {
     
   }
 }
+
+
+
 

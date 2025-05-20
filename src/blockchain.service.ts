@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
 
-const contractAddress = '0x1572f9DFC54149F5141ECf5e88775DC7DBb76D93';
+const contractAddress = '0xcad6bcde9df00077ee58842ccff5ba1d5570ef69';
 const contractABI: any = [
   {
     "inputs": [],
@@ -1242,6 +1242,7 @@ export class BlockchainService {
     const tx = await (this.contract as any).updateElectionDetails(electionID, name, startDate, endDate, domainFilter);
     await tx.wait();
   }
+
 
   //End Election
 

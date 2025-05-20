@@ -85,6 +85,7 @@ contract DecentralizedVoting {
 
 
 
+
     
     // Update election details
     function updateElectionDetails(uint256 _electionId, string memory _newName, string memory _startDate, string memory _endDate, string memory _newDomainFilter) public onlyOrg {
@@ -169,8 +170,6 @@ contract DecentralizedVoting {
 
         return (election.name, votes);
     }
-
-    
     
     // Get election name
     function getElectionName(uint256 _electionId) public view returns (string memory) {
