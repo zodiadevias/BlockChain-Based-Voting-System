@@ -11,10 +11,13 @@
       <div class="box-container-full">
         <h3 class="box-title">Join Election</h3>
         <div class="box-no-scroll">
-          <h4>Enter Election ID:</h4>
-          <input type="text" [(ngModel)]="electionID">
-          <button (click)="viewElection(electionID)">Join</button>
-          <p>{{msg}}</p>
+          <div class="input-container">
+            <h1>Enter Election ID:</h1>
+            <input type="text" [(ngModel)]="electionID" (click)="msg = ''; electionID = ''">
+            <button (click)="viewElection(electionID)">Join</button>
+            <p>{{msg}}</p>
+          </div>
+          
         </div>
       </div>
     }

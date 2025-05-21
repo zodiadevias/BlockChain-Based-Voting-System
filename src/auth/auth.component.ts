@@ -41,9 +41,10 @@ export class AuthComponent {
 
   
   toggleOTP(){
+    if ((document.getElementById('name') as HTMLInputElement).value == '' || (document.getElementById('email') as HTMLInputElement).value == '') return;
     this.isOtp = true;
     this.randomOTP = Math.floor(Math.random() * 10000);
-    console.log(this.randomOTP);
+    
     const templateParams = {
       passcode: this.randomOTP,
       email: (document.getElementById('email') as HTMLInputElement).value,
@@ -101,6 +102,7 @@ export class AuthComponent {
       if (isOrg == true){
         const orgName :string = (document.getElementById('orgName') as HTMLInputElement).value;
         if (userName != '' && email != '' && orgName != '') {
+          this.success = 'Processing...'
           await this.blockchainService.addOrg(orgName, userName, email);
           const isOrganizer = await this.blockchainService.isOrg(userAddress);
           if (isOrganizer){
@@ -116,6 +118,7 @@ export class AuthComponent {
       else if (isOrg == false){
         if(this.otp == (this.randomOTP).toString()){
           if (userName != '' && email != '') {
+            this.success = 'Processing...'
             await this.blockchainService.addUser(userAddress, userName, email);
             const isUser = await this.blockchainService.userExists(userAddress);
             if (isUser){
@@ -128,8 +131,7 @@ export class AuthComponent {
           }
         }else{
           this.success = 'Incorrect OTP';
-          console.log(this.otp);
-          console.log(this.randomOTP);
+          
         }
         
       }

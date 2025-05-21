@@ -126,8 +126,8 @@ export class VoteComponent implements OnInit {
     const status = await this.BlockchainService.getElectionStatus(electionID);
     
     
-    if(status == true){
-      this.msg = 'Results are not yet released.';
+    if(status == false){
+      this.msg = 'Election already closed.';
       return;
     }
 

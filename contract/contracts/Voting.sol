@@ -29,6 +29,7 @@ contract DecentralizedVoting {
     struct User {
         string userName;
         string email;
+        uint[] recentlyVotedIDs;
     }
 
     mapping(address => User) public users;
@@ -430,6 +431,7 @@ contract DecentralizedVoting {
         if(bytes(newEmail).length > 0)
             user.email = newEmail;
     }
+
     
 
     //end voter
@@ -453,8 +455,14 @@ contract DecentralizedVoting {
         }
 
         election.hasVoted[msg.sender] = true;
+        users[msg.sender].recentlyVotedIDs.push(_electionId);
 
         emit Voted(_electionId, _candidateIndexes, msg.sender);
+    }
+
+    
+    function getRecentlyVotedElectionIDs(address userAddress) public view returns (uint256[] memory) {
+        return users[userAddress].recentlyVotedIDs;
     }
 
     
