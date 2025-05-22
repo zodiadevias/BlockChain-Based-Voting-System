@@ -37,7 +37,7 @@
                     <mat-list-item class="list-item" *ngFor="let election of ownedElections; let i = index" ><h4 style="text-align: center;" class="btn-list" (click)="viewElection(election)">{{election}}</h4><mat-divider></mat-divider></mat-list-item>
                   </mat-list>
                   <ng-template #noElections>
-                    <button (click)="ownedElectionNames()" class="btn-refresh">Click here to refresh list</button>
+                    <button (click)="ownedElectionNames()" class="btn-refresh">No Data</button>
                 </ng-template>
             </div>
             </div>
@@ -96,7 +96,7 @@
                                             <mat-list-item (click)="toggleCandidateUpdateOn(candidates[i])" class="list-item" *ngFor="let candidate of candidates; let i = index" ><h4 style="text-align: center;" class="btn-list">{{candidate}}</h4><mat-divider></mat-divider></mat-list-item>
                                           </mat-list>
                                           <ng-template #noCandidates>
-                                            <button (click)="getCandidateNames()" class="btn-refresh">Click here to refresh list</button>
+                                            <button (click)="getCandidateNames()" class="btn-refresh">No Data</button>
                                         </ng-template>
                                     </div>
                                 </div>

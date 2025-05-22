@@ -12,6 +12,7 @@ import { OutputFileEntry } from '@uploadcare/file-uploader';
 import { UploadComponent } from '../upload/upload.component';
 import { GlobalsService } from '../globals.service';
 import { Subscription, interval } from 'rxjs';
+import { CheckAuthService } from '../check-auth.service';
 
 UC.defineComponents(UC);
 
@@ -38,6 +39,7 @@ export class ElectionsComponent implements OnInit {
   private blockchainService = inject(BlockchainService);
   private globalsService = inject(GlobalsService);
   router = inject(Router);
+  private checkAuth = inject(CheckAuthService);
   whatAmI: string = '';
   elections: any[] = [];
   ownedElections: string[] = [];
@@ -120,6 +122,7 @@ export class ElectionsComponent implements OnInit {
   });
 
   async toggleWindow(window: string) {
+    this.checkAuth.checkAuth();
     this.toggleWindowManager = window;
     if(window == 'details'){
       this._startDate = await this.blockchainService.getElectionStartDate(this.electionIdTitle);
@@ -137,6 +140,7 @@ export class ElectionsComponent implements OnInit {
   }
 
   checkDate(){
+    this.checkAuth.checkAuth();
     if (this.electionName == '' || this.startDate == '' || this.endDate == '' || this.domainFilter == '') {
       this.msg = 'Please fill required fields';
       return;
@@ -157,29 +161,36 @@ export class ElectionsComponent implements OnInit {
   }
 
   async createElection() {
+    this.checkAuth.checkAuth();
     await this.blockchainService.createElection(this.electionName, this.startDate, this.endDate, this.domainFilter);
     this.getOwnedElections();
   }
 
   async getElections() {
+    this.checkAuth.checkAuth();
     this.elections = await this.blockchainService.getElectionNames();
-    console.log(this.elections);
+    
   }
 
   async getOwnedElections() {
     this.ownedElections = await this.blockchainService.getOwnedElectionNames();
-    console.log(this.ownedElections);
-    console.log(this.elections);
+    
   }
 
   async ownedElectionNames() {
-    this.ownedElections = await this.blockchainService.getOwnedElectionNames();
-    for (let i = 0; i < this.ownedElections.length; i++) {
-      this.elections[i] = await this.blockchainService.getElectionIDbyName(this.ownedElections[i]);
-    }
+    this.blockchainService.getOwnedElectionNames().then(async (ownedElections) => {
+      this.ownedElections = ownedElections;
+      for (let i = 0; i < this.ownedElections.length; i++) {
+        this.elections[i] = await this.blockchainService.getElectionIDbyName(this.ownedElections[i]);
+      }
+    });
+    // for (let i = 0; i < this.ownedElections.length; i++) {
+    //   this.elections[i] = await this.blockchainService.getElectionIDbyName(this.ownedElections[i]);
+    // }
   }
 
   async updateElection(){
+    this.checkAuth.checkAuth();
     const confirmUpdate = confirm('Are you sure you want to update this election?');
     if(confirmUpdate){
       await this.blockchainService.updateElection(this.electionIdTitle, this.new_electionName, this.new_startDate, this.new_endDate, this.new_domainFilter);
@@ -188,6 +199,7 @@ export class ElectionsComponent implements OnInit {
     }
   }
   async viewElection(name: string) {
+    this.checkAuth.checkAuth();
     this.elections = await this.blockchainService.getElectionNames();
     const electionID: number = Number(await this.getOwnedElectionIDbyName(name));
     const endDate = await this.blockchainService.getElectionEndDate(electionID);
@@ -248,6 +260,7 @@ export class ElectionsComponent implements OnInit {
   
 
   async addCandidate() {
+    this.checkAuth.checkAuth();
     if (this.candidateName == '' || this.candidatePosition == '' || this.candidatePlatform == '' || this.cdn == '') return;
     const electionID = this.electionIdTitle;
     await this.blockchainService.addCandidate(electionID, this.candidateName, this.candidatePosition, this.candidatePlatform, this.globalsService.getCDN());
@@ -262,6 +275,7 @@ export class ElectionsComponent implements OnInit {
   }
 
   async toggleCandidateUpdateOn(name: string) {
+    this.checkAuth.checkAuth();
     this.updateCandidate = true;
     this.candidateNameTitle = name;
     this.candidateNameUpdate = name;
@@ -271,6 +285,7 @@ export class ElectionsComponent implements OnInit {
   }
 
   async toggleCandidateUpdateOff() {
+    this.checkAuth.checkAuth();
     this.updateCandidate = false;
     this.candidateNameUpdate = '';
   }
@@ -280,6 +295,7 @@ export class ElectionsComponent implements OnInit {
   }
 
   async deleteCandidate(){
+    this.checkAuth.checkAuth();
     const confirmDelete = confirm('Are you sure you want to delete this candidate?');
 
     if (confirmDelete) {
@@ -294,6 +310,7 @@ export class ElectionsComponent implements OnInit {
   }
 
   async updateCandidateInfo(){
+    this.checkAuth.checkAuth();
     if (this.candidateNameUpdate == '' || this.candidatePositionUpdate == '' || this.candidatePlatformUpdate == '') return;
     const confirmUpdate = confirm('Are you sure you want to update this candidate?');
     if (confirmUpdate){

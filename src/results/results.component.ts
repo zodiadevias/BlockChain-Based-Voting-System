@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BlockchainService } from '../blockchain.service';
 import { Router } from '@angular/router';
 import { LeftSidebarComponent } from '../left-sidebar/left-sidebar.component';
-
+import { CheckAuthService } from '../check-auth.service';
 
 @Component({
   selector: 'app-results',
@@ -28,11 +28,37 @@ export class ResultsComponent implements OnInit{
   isUser: any;
   isOrg: any;
 
-  constructor(private BlockchainService: BlockchainService, private router: Router) { }
+  constructor(private BlockchainService: BlockchainService, private router: Router, private checkAuth: CheckAuthService) { }
   async ngOnInit() {
     this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
-    this.isUser = await this.BlockchainService.userExists(await this.BlockchainService.getUserAddress());
-    this.isOrg = await this.BlockchainService.isOrg(await this.BlockchainService.getUserAddress());
+    // await this.BlockchainService.loadBlockchain();
+    
+    try{
+        await this.BlockchainService.loadBlockchain();
+        this.isUser = await this.BlockchainService.userExists(await this.BlockchainService.getUserAddress());
+        this.isOrg = await this.BlockchainService.isOrg(await this.BlockchainService.getUserAddress());
+        if (this.isUser){
+          localStorage.clear();
+          localStorage.setItem('user', 'true');
+          
+          
+        }
+        else if (this.isOrg){
+          localStorage.clear();
+          localStorage.setItem('user', 'false');
+          
+          
+        }
+        else{
+          localStorage.clear();
+          this.router.navigate(['/auth']);
+        }
+
+      }catch(e){
+        localStorage.clear();
+        
+        this.router.navigate(['/auth']);
+      }
     this.allocateCandidates();
   }
 
@@ -127,11 +153,7 @@ export class ResultsComponent implements OnInit{
         }
      }
 
-     console.log('chairmans', this.chairmans, this.chairmanVotes, this.chairmanVotes.length);
-     console.log('vice chairmans', this.vChairmans, this.vchairmanVotes);
-     console.log('secretarys', this.secretarys, this.secretaryVotes);
-     console.log('auditors', this.auditors, this.auditorVotes);
-     console.log('pios', this.pios, this.pioVotes);
+     
   }
 
   chairmanWin = 0;
@@ -156,11 +178,18 @@ export class ResultsComponent implements OnInit{
   toggle = 1;
 
   async results(){
+    this.checkAuth.checkAuth();
     this.clear();
-     await this.allocateCandidates();
+    try{
+      await this.allocateCandidates();
       this.electionStatus = await this.BlockchainService.getElectionStatus(this.electionID);
       this.endDate = await this.BlockchainService.getElectionEndDate(this.electionID);
       this.electionName = await this.BlockchainService.getElectionName(this.electionID);
+    }catch (e){
+      this.msg = 'Election does not exist';
+      return;
+    }
+     
       const date = new Date();
       // if(date > new Date(this.endDate)){
       //   this.msg = 'Election is past due, please end the election';
@@ -206,10 +235,10 @@ export class ResultsComponent implements OnInit{
         this.toggle = 2;
       }else if(this.electionStatus == true){
         this.msg = 'Election is still ongoing';
-        console.log('true');
+        
       }else{
         this.msg = 'Election does not exist';
-      console.log(this.electionStatus);
+      
       }
 
       const chairID = await this.BlockchainService.getCandidateIDByName(this.electionID, this.electedChairman);
@@ -224,7 +253,7 @@ export class ResultsComponent implements OnInit{
       this.secretaryimg = await this.BlockchainService.getCandidateCdn(this.electionID, secretaryID);
       this.auditorimg = await this.BlockchainService.getCandidateCdn(this.electionID, auditorID);
       this.pioimg = await this.BlockchainService.getCandidateCdn(this.electionID, pioID);
-      console.log(this.chairimg);
+      
       
       
 
@@ -233,12 +262,19 @@ export class ResultsComponent implements OnInit{
 
 
   async closeElection(electionID: number){
+    this.checkAuth.checkAuth();
     this.electionStatus = await this.BlockchainService.getElectionStatus(electionID);
     if(this.electionStatus == false){
       this.clsmsg = 'Election is already closed';
     }else{
-      await this.BlockchainService.closeElection(electionID);
-      this.clsmsg = 'Election is now closed';
+      try{
+        await this.BlockchainService.closeElection(electionID);
+        this.clsmsg = 'Election is now closed';
+      }catch(e){
+        this.clsmsg = 'Transaction cancelled by organizer.';
+      }
+      
+      
     }
     
     

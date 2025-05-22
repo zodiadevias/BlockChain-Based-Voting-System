@@ -108,6 +108,16 @@
     gap: 10px;
   }
 
+  .end{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    
+    gap: 10px;
+  }
+
   .btn{
     width: 200px;
     height: 45px;

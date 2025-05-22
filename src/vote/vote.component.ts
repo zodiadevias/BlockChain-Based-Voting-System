@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { LeftSidebarComponent } from '../left-sidebar/left-sidebar.component';
 import { MatDividerModule } from '@angular/material/divider';
 import {MatRadioModule} from '@angular/material/radio';
+import { CheckAuthService } from '../check-auth.service';
 
 @Component({
   selector: 'app-vote',
@@ -29,14 +30,41 @@ export class VoteComponent implements OnInit {
     }
   }
 
-  constructor(private BlockchainService: BlockchainService, private router: Router) { 
+  constructor(private BlockchainService: BlockchainService, private router: Router, private checkAuth: CheckAuthService) {
     
   }
 
   async ngOnInit(){
     
     this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
-    await this.BlockchainService.loadBlockchain();
+    try{
+        await this.BlockchainService.loadBlockchain();
+        const isUser = await this.BlockchainService.userExists(await this.BlockchainService.getUserAddress());
+        const isOrg = await this.BlockchainService.isOrg(await this.BlockchainService.getUserAddress());
+        if (isUser){
+          localStorage.clear();
+          localStorage.setItem('user', 'true');
+          
+          
+        }
+        else if (isOrg){
+          localStorage.clear();
+          localStorage.setItem('user', 'false');
+          
+          
+        }
+        else{
+          localStorage.clear();
+          this.router.navigate(['/auth']);
+        }
+
+      }catch(e){
+        localStorage.clear();
+        
+        this.router.navigate(['/auth']);
+      }
+
+      
     
     
   }
@@ -120,21 +148,27 @@ export class VoteComponent implements OnInit {
   
 
   async viewElection(electionID: number){
+    try{
+      const endDate = await this.BlockchainService.getElectionEndDate(electionID);
+      const date = new Date(endDate);
+      const status = await this.BlockchainService.getElectionStatus(electionID);
+      if(status == false){
+        this.msg = 'Election already closed.';
+        return;
+      }
 
-    const endDate = await this.BlockchainService.getElectionEndDate(electionID);
-    const date = new Date(endDate);
-    const status = await this.BlockchainService.getElectionStatus(electionID);
-    
-    
-    if(status == false){
-      this.msg = 'Election already closed.';
+      if(date < new Date()){
+        this.msg = 'Election is over. Please check results';
+        return;
+      }
+    }catch(e){
+      this.msg = 'Election does not exist';
       return;
     }
-
-    if(date < new Date()){
-      this.msg = 'Election is over. Please check results';
-      return;
-    }
+    
+    
+    
+    
 
     
 
@@ -231,16 +265,17 @@ export class VoteComponent implements OnInit {
       }
       
       
-      console.log(this.candidates);
+      
       for(let i = 0; i < candidatelist.length; i++){
         this.candidateVotes.push(await this.BlockchainService.getCandidateVoteCount(this.electionID, i));
       }
   
-      console.log(this.candidateVotes);
+      
       
     }
 
   async submitVote(){
+    this.checkAuth.checkAuth();
     try{
       let selectedChairman = <HTMLInputElement>document.querySelector('input[name="chairman"][type="radio"]:checked');
       let selectedVChairman = <HTMLInputElement>document.querySelector('input[name="vchairman"][type="radio"]:checked');
@@ -263,7 +298,7 @@ export class VoteComponent implements OnInit {
         await this.BlockchainService.getCandidateIDByName(this.electionID, this.votedPIO)
     ];
 
-    console.log(voteID.length);
+    
     if(this.votedChairman != '' && this.votedVChairman != '' && this.votedSecretary != '' && this.votedAuditor != '' && this.votedPIO != ''){
         await this.BlockchainService.vote(this.electionID, voteID);
         this.getVoteCount();

@@ -10,21 +10,27 @@
             <h3 style="padding-top: 1rem;">Election Results</h3>
             <hr style="margin-left: -5rem;">
         </div>
+        <div class="box-container-full">
+            <div class="box-title"><h3 >Election Results</h3></div>
+              <div class="box-no-scroll">
+                  <div class="results">
+                    <h1>Enter Election ID:</h1>
+                    <input type="text" [(ngModel)]="electionID" (click)="clearfields()">
+                    <button class="btn" (click)="results()">Check Results</button>
+                    <p>{{msg}}</p>
+                    
+              </div>
+                      <div class="end">
+                          <h1>Close Election:</h1>
+                          <input type="text" [(ngModel)]="closeElectionID" (click)="clearfields()">
+                          <button class="btn" (click)="closeElection(closeElectionID)">End</button>
+                          <p>{{clsmsg}}</p>
+                      </div>
+            </div>
+        </div>
         
-        <div class="results">
-          <h1>Election Results</h1>
-          <h3>Enter Election ID:</h3>
-          <input type="text" [(ngModel)]="electionID" (click)="clearfields()">
-          <button (click)="results()">Check Results</button>
-          <p>{{msg}}</p>
-        </div>
 
-        <div class="end">
-          <h3>Close Election:</h3>
-          <input type="text" [(ngModel)]="closeElectionID" (click)="clearfields()">
-          <button (click)="closeElection(closeElectionID)">End</button>
-          <p>{{clsmsg}}</p>
-        </div>
+        
         }
 
         @if(toggle == 2){

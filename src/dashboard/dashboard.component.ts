@@ -5,6 +5,7 @@ import { BlockchainService } from '../blockchain.service';
 import { Router } from '@angular/router';
 import { LeftSidebarComponent } from '../left-sidebar/left-sidebar.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { CheckAuthService } from '../check-auth.service';
 
 
 
@@ -48,6 +49,7 @@ export class DashboardComponent implements OnInit {
 
   router = inject(Router);
   private blockchainService = inject(BlockchainService);
+  private checkAuth = inject(CheckAuthService);
   
   constructor() {
     
@@ -117,7 +119,8 @@ export class DashboardComponent implements OnInit {
 
 
   async upcomingElection() {
-    console.log("Upcoming Elections");
+
+    
     this.elections = await this.blockchainService.getOwnedElectionNames();
     for (let i = 0; i < this.elections.length; i++) {
       var electionName = await this.blockchainService.getElectionIDbyName(this.elections[i]);
@@ -128,7 +131,7 @@ export class DashboardComponent implements OnInit {
       var date = new Date();
       if (start > date && end > date) {
         this.upcomingElections.push(this.elections[i]);
-        console.log(this.upcomingElections);
+        
       }
     }
 

@@ -35,6 +35,10 @@
             <h4 class="vote-head">Chairman</h4>
 
             <mat-list>  
+              @if(chairmans.length == 0){
+                <p>No Data</p>
+                
+              }
               <mat-list-item class="list-item" *ngFor="let chairman of chairmans; let i = index" >
                 <h4 style="text-align: center;" class="btn-list">{{chairman}}</h4><br>
                 <img src="{{chairimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);">
@@ -49,6 +53,10 @@
             <h4 class="vote-head">Vice Chairman</h4>
 
             <mat-list>  
+              @if(vChairmans.length == 0){
+                <p>No Data</p>
+                
+              }
               <mat-list-item class="list-item" *ngFor="let vchairman of vChairmans; let i = index" >
                 <h4 style="text-align: center;" class="btn-list">{{vchairman}}</h4><br>
                 <img src="{{vchairimgs[i]}}"style="width: 100px;height:100px;transform: translateX(50%);"><br>
@@ -63,6 +71,10 @@
             <h4 class="vote-head">Secretary</h4>
 
             <mat-list>  
+              @if(secretarys.length == 0){
+                <p>No Data</p>
+                
+              }
               <mat-list-item class="list-item" *ngFor="let secretary of secretarys; let i = index" >
                 <h4 style="text-align: center;" class="btn-list">{{secretary}}</h4><br>
                 <img src="{{secretaryimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
@@ -75,6 +87,10 @@
             <h4 class="vote-head">Auditor</h4>
 
             <mat-list>  
+              @if(auditors.length == 0){
+                <p>No Data</p>
+                
+              }
               <mat-list-item class="list-item" *ngFor="let auditor of auditors; let i = index" >
                 <h4 style="text-align: center;" class="btn-list">{{auditor}}</h4><br>
                 <img src="{{auditorimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
@@ -87,6 +103,10 @@
             <h4 class="vote-head">P.I.O.</h4>
 
             <mat-list>  
+              @if(pios.length == 0){
+                <p>No Data</p>
+                
+              }
               <mat-list-item class="list-item" *ngFor="let pio of pios; let i = index" >
                 <h4 style="text-align: center;" class="btn-list">{{pio}}</h4><br>
                 <img src="{{pioimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
@@ -96,8 +116,11 @@
               </mat-list-item>
             </mat-list>
             <mat-divider></mat-divider>
-            <p>{{errormsg}}</p>
-            <button (click)="submitVote()">Submit</button>
+            <div class="btn-container">
+              <p>{{errormsg}}</p>
+              <button class="btn" (click)="submitVote()">Submit Votes</button>
+            </div>
+            
 
           </div>
         }

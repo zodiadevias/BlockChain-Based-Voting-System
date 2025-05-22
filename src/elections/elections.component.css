@@ -44,8 +44,13 @@
   .box{
     overflow-y: scroll;
     height: 93%;
+    scrollbar-gutter: stable;
+    scrollbar-color: transparent transparent;
     scrollbar-width: thin;
-    scrollbar-color: #CECECE #272635;
+    &:hover {
+        scrollbar-color: #CECECE #272635;
+    }
+    
   }
 
   .box-no-scroll{

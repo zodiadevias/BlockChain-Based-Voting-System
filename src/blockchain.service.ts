@@ -1171,12 +1171,13 @@ export class BlockchainService {
 
   async closeElection(electionID: number){
     if (!this.contract) return;
-    try{
+    // try{
       const tx = await (this.contract as any).closeElection(electionID);
       await tx.wait();     
-    }catch (error){
-      console.log(error);
-    }
+    // }catch (error){
+      
+    //   console.log(error);
+    // }
   }
 
   async getElectionNames(): Promise<string[]> {
