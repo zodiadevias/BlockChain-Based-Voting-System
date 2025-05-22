@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.21 <=0.8.20;
+pragma solidity  >=0.4.21 <=0.8.20;
 pragma experimental ABIEncoderV2;
 
 
@@ -401,7 +401,7 @@ contract DecentralizedVoting {
     //Voter
     function addUser(address userAddress, string memory userName, string memory email) public {
         require(bytes(users[userAddress].userName).length == 0, "User already exists");
-        users[userAddress] = User(userName, email);
+        users[userAddress] = User(userName, email, new uint256[](0));
         
     }
 

@@ -35,6 +35,7 @@ ngOnDestroy() {
 handleChangeEvent = (e: UC.EventMap['change']) => {
   this.files = e.detail.allEntries.filter(f => f.status === 'success') as OutputFileEntry<'success'>[];
   this.GlobalsService.postCDN(this.files[0].cdnUrl);
+  
 };
 
 getcdn(){

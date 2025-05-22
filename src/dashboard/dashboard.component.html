@@ -54,7 +54,11 @@
   @if(whatAmI == 'Voter'){
     <div class="box-container">
       <div class="box-title"><h2>Recently Voted Elections</h2></div>
+      <mat-list>
+        <mat-list-item class="list-item" *ngFor="let recent of recentElectionNamesReverse; let i = index" ><h4 style="text-align: center;" class="btn-list">{{recentElectionNamesReverse[i]}}</h4><mat-divider></mat-divider></mat-list-item>
+      </mat-list>
     </div>
+
     
   }
   

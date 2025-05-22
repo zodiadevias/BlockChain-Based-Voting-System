@@ -59,7 +59,7 @@
   "sourceMap": "71:360:0:-;;;248:58;8:9:-1;5:2;;;30:1;27;20:12;5:2;248:58:0;288:10;280:5;;:18;;;;;;;;;;;;;;;;;;71:360;;;;;;",
   "deployedSourceMap": "71:360:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;71:360:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;125:39;;;:::i;:::-;;;;;;;;;;;;;;;;;;;98:20;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;314:114;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;314:114:0;;;;;;;;;;;;;;;;;:::i;:::-;;125:39;;;;:::o;98:20::-;;;;;;;;;;;;;:::o;314:114::-;224:5;;;;;;;;;;;210:19;;:10;:19;;;206:26;;;411:9;384:24;:36;;;;206:26;314:114;:::o",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity >=0.4.21 <=0.8.20;\r\n\r\ncontract Migrations {\r\n    address public owner;\r\n    uint256 public last_completed_migration;\r\n\r\n    modifier restricted() {\r\n        if (msg.sender == owner) _;\r\n    }\r\n\r\n    constructor() public {\r\n        owner = msg.sender;\r\n    }\r\n\r\n    function setCompleted(uint256 completed) public restricted {\r\n        last_completed_migration = completed;\r\n    }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\dizon\\OneDrive\\Desktop\\Gordon College\\AppDev\\BlockVote\\contract\\contracts\\Migrations.sol",
+  "sourcePath": "C:\\Users\\dizon\\OneDrive\\Documents\\GitHub\\BlockChain-Based-Voting-System\\contract\\contracts\\Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -176,7 +176,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1779,
+                        "referencedDeclaration": 1810,
                         "src": "210:3:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -280,7 +280,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1779,
+                        "referencedDeclaration": 1810,
                         "src": "288:3:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -626,7 +626,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1779,
+                                  "referencedDeclaration": 1810,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -763,7 +763,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1779,
+                                  "referencedDeclaration": 1810,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -958,12 +958,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x4a7A688a88466A4100534f9A6f01A0A8C4dCa461",
-      "transactionHash": "0x294b9e48b9d0ce938ebf542d2978d255cfc64f15acca234ea83085b909e1d647"
+      "address": "0x18398d7ACC0424cA8B58Cf997AbcCFaF6A465202",
+      "transactionHash": "0x60d4a63f95348b4066a36474b919c890ed8f7aeff6ed727b5dcb0dae8208e1d6"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-05-08T20:47:22.153Z",
+  "updatedAt": "2025-05-22T03:14:39.841Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

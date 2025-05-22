@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
 
 // const contractAddress = '0xcad6bcde9df00077ee58842ccff5ba1d5570ef69';
-const contractAddress = '0x2A76F392340a0B64B19350288a705B420823efbA';
+const contractAddress = '0x1F62C7bf9b5af2C3726A6F1730AA7C2478AB7C5d';
 const contractABI: any = [
     {
       "inputs": [],
@@ -1138,6 +1138,27 @@ const contractABI: any = [
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "userAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getRecentlyVotedElectionIDs",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     }
   ];
 
@@ -1453,17 +1474,18 @@ async getCandidateVoteCount(electionID: number, candidateID: number): Promise<nu
     }    
   }
 
-  async getMyRecentElectionIds(): Promise<number> {
-    if (!this.contract) return 0;
-    try {
-      const address = await this.getUserAddress();
-      const result = await (this.contract as any).getRecentlyVotedElectionIDs(address);
-      return result[result.length-1];
-    } catch (error) {
-      console.error("Error getting my recent election id:", error);
-      return 0;
-    }    
+async getMyRecentElectionIds(): Promise<number[]> {
+  if (!this.contract) return [];
+  try {
+    const address = await this.getUserAddress();
+    const result = await (this.contract as any).getRecentlyVotedElectionIDs(address);
+    return result;
+  } catch (error) {
+    console.error("Error fetching recent election IDs:", error);
+    return [];
   }
+}
+
 
   //END USER
 
@@ -1493,12 +1515,10 @@ async getCandidateVoteCount(electionID: number, candidateID: number): Promise<nu
 
 async vote(electionId: number, candidateIndexes: number[]): Promise<void> {
   if (!this.contract) return;
-  try {
+  
     const tx = await (this.contract as any).Vote(electionId, candidateIndexes);
     await tx.wait();
-  } catch (error) {
-    console.error("Error voting for multiple candidates:", error);
-  }
+  
 }
 
 

@@ -75,10 +75,13 @@ export class DashboardComponent implements OnInit {
   
   async ngOnInit(): Promise<void> {
     this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
+    
 
     
       try{
         await this.blockchainService.loadBlockchain();
+        this.elections = await this.blockchainService.getElectionNames();
+        await this.getMyRecentElectionIds();
         const isUser = await this.blockchainService.userExists(await this.blockchainService.getUserAddress());
         const isOrg = await this.blockchainService.isOrg(await this.blockchainService.getUserAddress());
         this.walletAddress = await this.blockchainService.getUserAddress();
@@ -164,6 +167,22 @@ export class DashboardComponent implements OnInit {
     }
     
   }
+
+recents: any[] = [];
+recentElectionNames: any[] = [];
+recentElectionNamesReverse: any[] = [];
+
+async getMyRecentElectionIds(){
+  this.recents = await this.blockchainService.getMyRecentElectionIds();
+  for (let i = 0; i < this.recents.length; i++) {
+    this.recentElectionNames.push(await this.blockchainService.getElectionName(this.recents[i]));
+  }
+
+  for (let i = this.recents.length - 1; i >= 0; i--) {
+    this.recentElectionNamesReverse.push(await this.blockchainService.getElectionName(this.recents[i]));
+  }
+
+}
 
 
 

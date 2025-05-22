@@ -34,87 +34,104 @@
             
             <h4 class="vote-head">Chairman</h4>
 
-            <mat-list>  
-              @if(chairmans.length == 0){
-                <p>No Data</p>
-                
-              }
-              <mat-list-item class="list-item" *ngFor="let chairman of chairmans; let i = index" >
-                <h4 style="text-align: center;" class="btn-list">{{chairman}}</h4><br>
-                <img src="{{chairimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);">
-                
-                <br>
-                <p>Votes: {{chairmanVotes[i]}}</p>
-                
-                <mat-radio-button name="chairman" value="{{chairman}}" [(NgModel)]="votedChairman"></mat-radio-button>
-              </mat-list-item>
-            </mat-list>
+            <div class="scroll-X">
+              <mat-list>  
+                @if(chairmans.length == 0){
+                  <p>No Data</p>
+                  
+                }
+                <mat-list-item class="list-item" *ngFor="let chairman of chairmans; let i = index" >
+                  <div class="candidate-container">
+                      <h4>{{chairman}}</h4><br>
+                      <img src="{{chairimgs[i]}}" (click)="toggleToPlatform(chairman)">
+                      <br>
+                      <p>Votes: {{chairmanVotes[i]}}</p>
+                      <mat-radio-button name="chairman" value="{{chairman}}" [(NgModel)]="votedChairman"></mat-radio-button>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+            
 
             <h4 class="vote-head">Vice Chairman</h4>
 
-            <mat-list>  
-              @if(vChairmans.length == 0){
-                <p>No Data</p>
-                
-              }
-              <mat-list-item class="list-item" *ngFor="let vchairman of vChairmans; let i = index" >
-                <h4 style="text-align: center;" class="btn-list">{{vchairman}}</h4><br>
-                <img src="{{vchairimgs[i]}}"style="width: 100px;height:100px;transform: translateX(50%);"><br>
-                <p>Votes: {{vChairmanVotes[i]}}</p>
-                  <mat-radio-button name="vchairman" value={{vchairman}}></mat-radio-button>
-                
-                
-                
-              </mat-list-item>
-            </mat-list>
+            <div class="scroll-X">
+              <mat-list>  
+                @if(vChairmans.length == 0){
+                  <p>No Data</p>
+                  
+                }
+                <mat-list-item class="list-item" *ngFor="let vchairman of vChairmans; let i = index" >
+                  <div class="candidate-container">
+                      <h4>{{vchairman}}</h4><br>
+                      <img src="{{vchairimgs[i]}}" (click)="toggleToPlatform(vchairman)">
+                      <br>
+                      <p>Votes: {{vChairmanVotes[i]}}</p>
+                      <mat-radio-button name="vchairman" value="{{vchairman}}" [(NgModel)]="votedVChairman"></mat-radio-button>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
 
             <h4 class="vote-head">Secretary</h4>
 
-            <mat-list>  
-              @if(secretarys.length == 0){
-                <p>No Data</p>
-                
-              }
-              <mat-list-item class="list-item" *ngFor="let secretary of secretarys; let i = index" >
-                <h4 style="text-align: center;" class="btn-list">{{secretary}}</h4><br>
-                <img src="{{secretaryimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
-                    <p>Votes: {{secretaryVotes[i]}}</p>
-                    <mat-radio-button name="secretary" value="{{secretary}}"></mat-radio-button>
-                    
-              </mat-list-item>
-            </mat-list>
+            <div class="scroll-X">
+              <mat-list>  
+                @if(secretarys.length == 0){
+                  <p>No Data</p>
+                  
+                }
+                <mat-list-item class="list-item" *ngFor="let secretary of secretarys; let i = index" >
+                  <div class="candidate-container">
+                      <h4>{{secretary}}</h4><br>
+                      <img src="{{secretaryimgs[i]}}" (click)="toggleToPlatform(secretary)">
+                      <br>
+                      <p>Votes: {{secretaryVotes[i]}}</p>
+                      <mat-radio-button name="secretary"value="{{secretary}}" [(NgModel)]="votedSecretary"></mat-radio-button>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
 
             <h4 class="vote-head">Auditor</h4>
 
-            <mat-list>  
-              @if(auditors.length == 0){
-                <p>No Data</p>
-                
-              }
-              <mat-list-item class="list-item" *ngFor="let auditor of auditors; let i = index" >
-                <h4 style="text-align: center;" class="btn-list">{{auditor}}</h4><br>
-                <img src="{{auditorimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
-                <p>Votes: {{auditorVotes[i]}}</p>
-                    <mat-radio-button name="auditor" value="{{auditor}}"></mat-radio-button>
-                    
-              </mat-list-item>
-            </mat-list>
+            <div class="scroll-X">
+              <mat-list>  
+                @if(auditors.length == 0){
+                  <p>No Data</p>
+                  
+                }
+                <mat-list-item class="list-item" *ngFor="let auditor of auditors; let i = index" >
+                  <div class="candidate-container">
+                      <h4>{{auditor}}</h4><br>
+                      <img src="{{auditorimgs[i]}}" (click)="toggleToPlatform(auditor)">
+                      <br>
+                      <p>Votes: {{auditorVotes[i]}}</p>
+                      <mat-radio-button name="auditor" value="{{auditor}}" [(NgModel)]="votedAuditor"></mat-radio-button>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
 
             <h4 class="vote-head">P.I.O.</h4>
 
-            <mat-list>  
-              @if(pios.length == 0){
-                <p>No Data</p>
-                
-              }
-              <mat-list-item class="list-item" *ngFor="let pio of pios; let i = index" >
-                <h4 style="text-align: center;" class="btn-list">{{pio}}</h4><br>
-                <img src="{{pioimgs[i]}}" style="width: 100px;height:100px;transform: translateX(50%);"><br>
-                  <p>Votes: {{pioVotes[i]}}</p>
-                  <mat-radio-button name="pio" value="{{pio}}"></mat-radio-button>
+            <div class="scroll-X">
+              <mat-list>  
+                @if(pios.length == 0){
+                  <p>No Data</p>
                   
-              </mat-list-item>
-            </mat-list>
+                }
+                <mat-list-item class="list-item" *ngFor="let pio of pios; let i = index" >
+                  <div class="candidate-container">
+                      <h4 style="text-align: center;" class="btn-list">{{pio}}</h4><br>
+                      <img src="{{pioimgs[i]}}" (click)="toggleToPlatform(pio)">
+                      <br>
+                      <p>Votes: {{pioVotes[i]}}</p>
+                      <mat-radio-button name="pio" value="{{pio}}" [(NgModel)]="votedPIO"></mat-radio-button>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
             <mat-divider></mat-divider>
             <div class="btn-container">
               <p>{{errormsg}}</p>
@@ -135,9 +152,30 @@
             
           </div>
         }
+        @if(toggle == 'platform'){
+          <div class="platform"> 
+            <img src="{{pCandidateImage}}">
+            <h1>Candidate ID: {{pCandidateID}}</h1>
+            <h1>Candidate Name: {{pCandidateName}}</h1>
+            <div class="dividePlatform">
+              <h1>Candidate Platform:</h1>
+              <div class="box-p">
+                <p>{{pCandidatePlatform}}</p>
+              </div>
+            </div>
+            
+            
+
+            
+            
+          </div>
+        }
         
         </div>
       </div>
     }
+
+
+    
     
 </div>

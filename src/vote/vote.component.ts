@@ -300,8 +300,13 @@ export class VoteComponent implements OnInit {
 
     
     if(this.votedChairman != '' && this.votedVChairman != '' && this.votedSecretary != '' && this.votedAuditor != '' && this.votedPIO != ''){
+      try{
         await this.BlockchainService.vote(this.electionID, voteID);
         this.getVoteCount();
+      }catch(error){
+        this.errormsg = 'You have already voted';
+      }
+        
     }
   }
 
@@ -309,6 +314,22 @@ export class VoteComponent implements OnInit {
   async getCandidateIDByName(name: string){
     return await this.BlockchainService.getCandidateIDByName(this.electionID, name);
     
+  }
+
+
+  pCandidateName = '';
+  pCandidatePlatform = '';
+  pCandidateID: number | null = null;
+  pCandidateImage = '';
+
+  async toggleToPlatform(name: string){
+    this.pCandidateName = name;
+    this.pCandidateID = await this.getCandidateIDByName(name);
+    this.pCandidatePlatform = await this.BlockchainService.getCandidatePlatform(this.electionID, this.pCandidateID);
+    this.pCandidateImage = await this.BlockchainService.getCandidateCdn(this.electionID, this.pCandidateID);
+    this.toggle = 'platform';
+
+
   }
 
   
