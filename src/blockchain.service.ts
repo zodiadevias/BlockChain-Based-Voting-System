@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
 
 // const contractAddress = '0xcad6bcde9df00077ee58842ccff5ba1d5570ef69';
-const contractAddress = '0x1F62C7bf9b5af2C3726A6F1730AA7C2478AB7C5d';
+const contractAddress = '0x41af4eebeb42f132832095dcfda610405be17164';
 const contractABI: any = [
     {
       "inputs": [],
