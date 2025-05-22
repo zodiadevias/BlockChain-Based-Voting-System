@@ -239,6 +239,18 @@ contract DecentralizedVoting {
     }
 
     
+    // Add multiple candidates to an election (only owner)
+    function addMultipleCandidates(uint256 _electionId, string[] memory _candidateNames, string[] memory _candidatePositions, string[] memory _platforms, string[] memory _cdns) public onlyOrg {
+        require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
+        require(elections[_electionId].active, "Election is not active");
+
+        for (uint256 i = 0; i < _candidateNames.length; i++) {
+            elections[_electionId].candidates.push(Candidate({ name: _candidateNames[i], voteCount: 0 , position: _candidatePositions[i] , platform: _platforms[i], cdn: _cdns[i]}));
+            emit CandidateAdded(_electionId, _candidateNames[i]);
+        }
+    }
+
+    
     // Update candidate information
     function updateCandidateInfo(uint256 _electionId, uint256 _candidateIndex, string memory _newName, string memory _newPosition, string memory _newPlatform, string memory _newcdn) public onlyOrg {
         require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
